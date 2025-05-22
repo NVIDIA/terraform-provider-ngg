@@ -1,0 +1,69 @@
+---
+page_title: '{{ .ProviderShortName | trimspace }}_version (Data Source)'
+subcategory: ''
+description: |-
+---
+
+# {{ .ProviderShortName | trimspace }}_version (Data Source)
+
+The {{ .ProviderShortName | trimspace }}_version data source uses {{ .RenderedProviderName | trimspace }} Op's backend_version functionality to get the current {{ .RenderedProviderName | trimspace }} version.
+
+## Usage
+
+1. Define an empty `{{ .ProviderShortName | trimspace }}_version` data source block.
+
+   ```hcl
+   data "{{ .ProviderShortName | trimspace }}_version" "version" {
+   }
+   ```
+
+   -> You can set the `{{ .ProviderShortName | trimspace }}_version` data name to anything you'd like, but `version` is the recommended best practice.
+
+2. Define a `backend_version` output block.
+
+   ```hcl
+   output "backend_version" {
+     value = data.{{ .ProviderShortName | trimspace }}_version.version
+   }
+   ```
+
+   Set the `value` to the previously-defined data source name.  The {{ .RenderedProviderName | trimspace }} backend automatically retrieves version from the `{{ .ProviderShortName | trimspace }}_version` data source block and passes the value to the `backend_version` output value.
+
+   Executing `terraform apply` will now include a `backend_version` block output:
+   
+   ```
+   Changes to Outputs:
+     + backend_version = {
+         + build_info = jsonencode(
+               {
+                 + build_date = "Mon_May_23_16:50:51_UTC_2022"
+                 + tag        = "master-5.0.7"
+               }
+           )
+         + id         = "1653441172"
+         + major      = "5"
+         + minor      = "0"
+         + patch      = "7"
+         + version    = "release-5.0.7"
+       }
+   ```
+### Conditionally creating objects
+
+You can use the {{ .ProviderShortName | trimspace }}_version data source definition to conditionally create objects.
+
+For example, here we're only creating the `example_notebook` Notebook object if the current major version is `5` or greater:
+
+```hcl
+data "{{ .ProviderShortName | trimspace }}_version" "version" {
+}
+
+resource "{{ .ProviderShortName | trimspace }}_notebook" "example_notebook" {
+  count = data.{{ .ProviderShortName | trimspace }}_version.version.major >= 5 ? 1 : 0
+  name = "example_notebook"
+  description = "A sample notebook."
+  data = file("${path.module}/data/example-notebook.json")
+  enabled = true
+}
+```
+
+{{ .SchemaMarkdown | trimspace }}

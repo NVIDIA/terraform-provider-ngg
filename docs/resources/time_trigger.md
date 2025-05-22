@@ -18,7 +18,7 @@ Nvidia GPU Guardian time_trigger. A condition that triggers Notebooks.
 ### Required
 
 - `fire_query` (String) The trigger condition for an Alarm (general expression) or the TimeTrigger (e.g. 'every 5m').
-- `name` (String) The name/symbol for the object within Nvidia GPU Guardian and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 

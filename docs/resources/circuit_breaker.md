@@ -20,7 +20,7 @@ Nvidia GPU Guardian circuit_breaker. An automatic rate limit on actions.
 - `command` (String) A specific action to run.
 - `duration` (String)
 - `hard_limit` (Number)
-- `name` (String) The name/symbol for the object within Nvidia GPU Guardian and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 

@@ -1,0 +1,80 @@
+---
+page_title: "{{ .ProviderShortName | trimspace }}_bot Resource - {{ .ProviderName | trimspace }}"
+subcategory: ""
+description: |-
+  Alarms use Bots to execute automated Actions.
+---
+
+# {{ .ProviderShortName | trimspace }}_bot (Resource)
+
+A Bot connects a single Alarm to one or more Actions. When the Alarm is raised the Bot fires all associated and enabled Actions to close the auto-remediation loop.
+
+## Required Properties
+
+Each Bot has various configurable properties that determine its behavior. The minimal required properties to create a Bot are:
+
+- name - The name of the Bot
+- command - An `if-then-fi` statement containing the Alarm name and Action name associated with the Bot. Alternatively, the `command` property can be a custom Linux command.
+
+## Usage
+
+The following example creates a Bot named `cpu_bot` that executes the `restart_action` Action when the `high_cpu_alarm` Alarm's fire_query is true:
+
+```tf
+resource "{{ .ProviderShortName | trimspace }}_bot" "cpu_bot" {
+  name = "cpu_bot"
+  command = "if ${ {{ .ProviderShortName | trimspace }}_alarm.high_cpu_alarm.name} then ${ {{ .ProviderShortName | trimspace }}_action.restart_action.name} fi"
+  description = "Restart on high CPU usage."
+  enabled = true
+}
+```
+
+The `command` property specifies the Alarm and Action that are connected by this Bot. It uses Terraform's built-in string interpolation to evaluate the name of both the Alarm and Action.
+
+### Advanced Usage
+
+Configuring a combination of an Alarm, Action, and Bot closes the fundamental auto-remediation loop provided by {{ .RenderedProviderName | trimspace }}.  Below we're using portions of {{ .RenderedProviderName | trimspace }}'s JVM Op Pack to create a full incident automation loop when JVM memory usage gets too high.
+
+First, the `jvm_trace_check_heap` Action determines if JVM heap usage exceeds a variable-defined threshold:
+
+{{tffile "examples/op_packs/jvm_trace/actions.tf"}}
+
+The `jvm_trace_heap_alarm` Alarm executes the `jvm_trace_check_heap` Action as part of its fire_query and clear_query:
+
+{{tffile "examples/op_packs/jvm_trace/alarms.tf"}}
+
+We define another Action called `jvm_trace_jvm_debug` that executes a bash script that dumps JVM debug data to AWS S3 before restarting the JVM:
+
+```tf
+# Action to dump the JVM stack-trace on the selected resources and process.
+resource "{{ .ProviderShortName | trimspace }}_action" "jvm_trace_jvm_debug" {
+  name = "${var.namespace}_jvm_dump_stack"
+  description = "Dump JVM process (by regex) heap, thread and GC info to s3, then kill the pod."
+  # Parameters passed in: the regular expression to select process name, and destination AWS S3 bucket.
+  params = [ "JVM_PROCESS_REGEX" , "S3_BUCKET"]
+  # Extract process info, and kill the pod.
+  command = "`cd ${var.script_path} && chmod +x jvm_dumps.sh && ./jvm_dumps.sh $${JVM_PROCESS_REGEX} $${S3_BUCKET} >>/tmp/dumps.log`"
+  # Select the shell to run 'command' with.
+  #shell = "/bin/sh"
+
+  # UI / CLI annotation informational messages:
+  start_short_template    = "Dumping JVM info."
+  error_short_template    = "Error dumping JVM info."
+  complete_short_template = "Finished dumping JVM info."
+  start_long_template     = "Dumping JVM process ${var.jvm_process_regex} info."
+  error_long_template     = "Error dumping JVM process ${var.jvm_process_regex} info."
+  complete_long_template  = "Finished dumping JVM process ${var.jvm_process_regex} info."
+
+  enabled = true
+}
+```
+
+Lastly, we connect the `jvm_trace_heap_alarm` Alarm and the `jvm_trace_check_heap` Action with the `jvm_trace_dump_bot` Bot:
+
+{{tffile "examples/op_packs/jvm_trace/bots.tf"}}
+
+Now, anytime JVM memory exceeds our defined threshold the JVM is automatically restarted and the debug data is exported for further analysis.
+
+-> See the {{ .RenderedProviderName | trimspace }} Bots Documentation for more info.
+
+{{ .SchemaMarkdown | trimspace }}

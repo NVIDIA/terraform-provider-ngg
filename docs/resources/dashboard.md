@@ -18,7 +18,7 @@ Nvidia GPU Guardian dashboard. A platform for visualizing resources and their as
 ### Required
 
 - `dashboard_type` (String) Specifies the type of the dashboard configuration. Currently, only 'TAGS_SEQUENCE' is supported.
-- `name` (String) The name/symbol for the object within Nvidia GPU Guardian and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 

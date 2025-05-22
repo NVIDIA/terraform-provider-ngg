@@ -1,0 +1,35 @@
+---
+page_title: "{{ .ProviderShortName | trimspace }}_resource Resource - {{ .ProviderName | trimspace }}"
+subcategory: ""
+description: |-
+  {{ .RenderedProviderName | trimspace }} resource. A server or compute resource in the system (e.g. host, pod, container).
+---
+
+# {{ .ProviderShortName | trimspace }}_resource (Resource)
+
+Resources are the infrastructure objects managed by {{ .RenderedProviderName | trimspace }}.  A Resources refers to a specific host, pod, or container throughout the {{ .RenderedProviderName | trimspace }} platform. It may also refer to a more distinct entity, such as a virtual machine or a database instance.
+
+Resources types are platform and provider agnostic. So whether it's a fleet of pods and containers in Kubernetes, stand-alone hosts, or many virtual machines, {{ .RenderedProviderName | trimspace }} can control those Resourcess within AWS, GCP, or Azure.
+
+-> {{ .RenderedProviderName | trimspace }} Resources are not to be confused with Terraform resources.
+
+## Required Properties
+
+- name - A unique name for the Resource resource.
+- value - A valid Op statement that defines a valid Resource query.
+
+## Usage
+
+{{ .RenderedProviderName | trimspace }} Resources are effectively aliases for more complex Resource queries.  For example, the following definition creates a custom Resource called `az_k8s` as an alias for the full query to target Kubernetes pods on Azure:
+
+```tf
+resource "{{ .ProviderShortName | trimspace }}_resource" "az_k8s" {
+  name        = "${var.namespace}_az_k8s"
+  value       = "hosts | k8s=true | cloud_provider='azure' | pods | namespace=[\"${var.namespace}\"]"
+  description = "All {{ .RenderedProviderName | trimspace }} Kubernetes pods on Azure"
+}
+```
+
+-> See the {{ .RenderedProviderName | trimspace }} Resources documentation for more info.
+
+{{ .SchemaMarkdown | trimspace }}

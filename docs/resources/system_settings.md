@@ -17,7 +17,7 @@ Nvidia GPU Guardian system_settings. System-level settings. Note: there must onl
 
 ### Required
 
-- `name` (String) The name/symbol for the object within Nvidia GPU Guardian and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
@@ -46,7 +46,7 @@ Nvidia GPU Guardian system_settings. System-level settings. Note: there must onl
 - `runbook_ad_hoc_approval_request_enabled` (Boolean) Defaults to `true`.
 - `runbook_approval_request_expiry_time` (Number) Defaults to `60`.
 - `skipped_tags` (List of String) Defines a list of tags that are skipped on agent tag ingestion
-- `time_trigger_permissions_user` (String) System setting for the user that time-triggered notebooks run as. Defaults to `Nvidia GPU Guardian`.
+- `time_trigger_permissions_user` (String) System setting for the user that time-triggered notebooks run as. Defaults to `Shoreline`.
 
 ### Read-Only
 

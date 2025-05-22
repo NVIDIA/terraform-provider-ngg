@@ -1,0 +1,50 @@
+---
+page_title: "{{ .ProviderShortName | trimspace }}_alarm Resource - {{ .ProviderName | trimspace }}"
+subcategory: ""
+description: |-
+  Alarms are fully-customizable Metric or status checks that automatically trigger remediation Actions.
+---
+
+# {{ .ProviderShortName | trimspace }}_alarm (Resource)
+
+Alarms frequently check one or more Metric thresholds or custom Resource queries. The Alarm is raised based on custom thresholds or shell commands you define, which informs any connected Bot to trigger remedial Actions.
+
+-> {{ .RenderedProviderName | trimspace }} includes dozens of built-in Metrics on which to base your Alarms. You can also combine multiple Metrics into Metric Sets for monitoring many Metrics at once. You can even create your own Derived Metrics if none of the built-in options meet your needs.
+
+## Required Properties
+
+Each Alarm can define many properties to determine its behavior. The required properties when creating an Alarm are:
+
+- name - The name of the Alarm.
+- fire_query - The Op statement that triggers the Alarm.
+- clear_query - The Op statement that clears the Alarm.
+- resource_query - The Op query that selects which Resources the Alarm triggers from.
+
+## Usage
+
+The following example creates an Alarm named `my_cpu_alarm` that fires when at least 80% of a host Resource's CPU usage metric measurements are equal to or exceed `40%` over the previous minute.
+
+```tf
+resource "{{ .ProviderShortName | trimspace }}_alarm" "cpu_alarm" {
+  name = "my_cpu_alarm"
+  fire_query = "(cpu_usage > 40 | sum(60)) >= 48.0"
+  clear_query = "(cpu_usage < 40 | sum(60)) >= 48.0"
+  resource_query = "hosts"
+}
+```
+
+-> Metric data points are collected once per second for all {{ .RenderedProviderName | trimspace }} Resources (i.e. hosts, pods, and containers). Thus, a Metric query of `(cpu_usage > 40 | sum(60)) >= 48.0` determines if at least 48 of the last 60 `cpu_usage` data points exceeded `40%`.  You can learn more from the Metrics documentation.
+
+### Advanced Usage
+
+You can also combine other Terraform resource blocks and variables to create complex Alarms.  In this example we're defining an Action called `jvm_trace_check_heap` that determines if JVM heap usage exceeds a variable-defined threshold:
+
+{{tffile "examples/op_packs/jvm_trace/actions.tf"}}
+
+The `jvm_trace_heap_alarm` Alarm executes the `jvm_trace_check_heap` Action as part of its fire_query and clear_query, to determine when the Alarm is raised or resolved, respectively:
+
+{{tffile "examples/op_packs/jvm_trace/alarms.tf"}}
+
+-> See the {{ .RenderedProviderName | trimspace }} Alarms Documentation for more info.
+
+{{ .SchemaMarkdown | trimspace }}
