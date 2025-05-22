@@ -1,11 +1,11 @@
-resource "ngg_runbook" "data_runbook" {
+resource "mcahr_runbook" "data_runbook" {
   name        = "data_runbook"
   description = "A sample runbook defined using the data field, which loads the runbook configuration from a separate JSON file."
   data        = file("${path.module}/data.json")
 }
 
 
-resource "ngg_runbook" "full_runbook" {
+resource "mcahr_runbook" "full_runbook" {
   cells = jsonencode([
     {
       "md" : "CREATE"
@@ -93,7 +93,7 @@ resource "ngg_runbook" "full_runbook" {
 }
 
 
-resource "ngg_runbook" "minimal_runbook" {
+resource "mcahr_runbook" "minimal_runbook" {
   name  = "minimal_runbook"
   cells = jsonencode([])
 }

@@ -8,15 +8,15 @@ default: install
 
 REPODIR=/tmp/tf-repo/providers
 
-BINARY=terraform-provider-ngg
+BINARY=terraform-provider-mcahr
 VERSION=1.15.30
 
-BUILD_ENV_VARS=-ldflags "-X 'main.RenderedProviderName=\"Nvidia GPU Guardian\"' -X 'main.ProviderShortName=\"ngg\"' -X 'provider.RenderedProviderName=\"Nvidia GPU Guardian\"' -X 'provider.ProviderShortName=\"ngg\"' -X 'provider.EnvVarsNamePrefix=\"NGG\"' -X 'provider.TfLogFile=\"/tmp/tf_provider.log\"' -X 'provider.DefaultUserName=\"Nvidia GPU Guardian\"'"
+BUILD_ENV_VARS=-ldflags "-X 'main.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'main.ProviderShortName=\"mcahr\"' -X 'provider.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'provider.ProviderShortName=\"mcahr\"' -X 'provider.EnvVarsNamePrefix=\"MCAHR\"' -X 'provider.TfLogFile=\"/tmp/tf_provider.log\"' -X 'provider.DefaultUserName=\"NVIDIA\"'"
 
 
 // NOTE: this only works for 64 bit linux and MacOs ("darwin")
 OS=$(shell uname | tr 'A-Z' 'a-z')
-SUBPATH=nvidia/ngg/local/ngg/$(VERSION)/$(OS)_amd64
+SUBPATH=NVIDIA/mcahr/local/mcahr/$(VERSION)/$(OS)_amd64
 
 generate:
 	go generate $(BUILD_ENV_VARS)
@@ -44,7 +44,7 @@ install: build
 use_local: 
 	@echo 'Setting up local overrides for terraform provider in ~/.terraformrc'
 	@echo 'NOTE: You need to re-run "make use_local" when the version changes."'
-	@echo 'provider_installation { dev_overrides { "nvidia/ngg" = "$(REPODIR)/$(SUBPATH)" } }' > ${HOME}/.terraformrc
+	@echo 'provider_installation { dev_overrides { "NVIDIA/mcahr" = "$(REPODIR)/$(SUBPATH)" } }' > ${HOME}/.terraformrc
 
 use_registry: 
 	@echo 'Removing ~/.terraformrc, to use the terraform registry again'
@@ -76,22 +76,22 @@ scan:
 EXAMPLES_ROOT_PATH=./examples/resources/_root
 
 init_ex: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) init
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) init
 
 apply_ex: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) apply --auto-approve
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) apply --auto-approve
 
 apply_ex_na: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) apply
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) apply
 
 destroy_ex: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) destroy --auto-approve
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) destroy --auto-approve
 
 destroy_ex_na: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) destroy
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) destroy
 
 plan_ex: 
-	tofu NGG_URL=$(NGG_URL) NGG_TOKEN=$(NGG_TOKEN) NGG_DEBUG=$(NGG_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) plan
+	tofu MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) -chdir=$(EXAMPLES_ROOT_PATH) plan
 
 .PHONY: distclean_ex
 distclean_ex: 

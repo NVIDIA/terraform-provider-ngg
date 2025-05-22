@@ -4,7 +4,7 @@ locals {
 }
 
 # Push the script that actually performs the JVM stack dump to the selected nodes.
-resource "ngg_file" "jvm_trace_dump_script" {
+resource "mcahr_file" "jvm_trace_dump_script" {
   name             = "${var.namespace}_dump_script"
   description      = "Script to dump JVM stack traces."
   input_file       = local.jvm_dump_sh                 # source file (relative to this module)

@@ -1,11 +1,11 @@
 ---
-page_title: "ngg_file Resource - terraform-provider-ngg"
+page_title: "mcahr_file Resource - terraform-provider-mcahr"
 subcategory: ""
 description: |-
-  Automatically distribute artifacts across your Nvidia GPU Guardian Resources.
+  Automatically distribute artifacts across your NVIDIA Mission Control autonomous hardware recovery Resources.
 ---
 
-# ngg_file (Resource)
+# mcahr_file (Resource)
 
 The File allows you to easily transmit critical files throughout your fleet, even to ephemeral Resources such as Kubernetes (k8s) containers. This technique is potent when you need to distribute and execute custom bash scripts or other critical files without the need for manual intervention.
 
@@ -16,11 +16,11 @@ A File must know where to copy from and where to distribute to.  The required pr
 - name - A unique object name.
 - destination_path - The relative, destination file path.
 - input_file - The relative, local file path of the source artifact.
-- resource_query - The target Nvidia GPU Guardian Resources to distribute the artifact to.
+- resource_query - The target NVIDIA Mission Control autonomous hardware recovery Resources to distribute the artifact to.
 
 ## Usage
 
-The following example distributes the local `<terraform_module_directory>/data/jvm_dumps.sh` file to the target Nvidia GPU Guardian Resources defined by the `resource_query` Terraform variable:
+The following example distributes the local `<terraform_module_directory>/data/jvm_dumps.sh` file to the target NVIDIA Mission Control autonomous hardware recovery Resources defined by the `resource_query` Terraform variable:
 
 -> Note the use of the `md5` property to auto update file-objects on `terraform apply`.
 
@@ -30,7 +30,7 @@ locals {
 }
 
 # Push the script that actually performs the JVM stack dump to the selected nodes.
-resource "ngg_file" "jvm_trace_dump_script" {
+resource "mcahr_file" "jvm_trace_dump_script" {
   name             = "${var.namespace}_dump_script"
   description      = "Script to dump JVM stack traces."
   input_file       = local.jvm_dump_sh                 # source file (relative to this module)

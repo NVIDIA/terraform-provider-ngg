@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "newrelic_integration_eu" {
+resource "mcahr_integration" "newrelic_integration_eu" {
   name                       = "newrelic_integration_eu"
   service_name               = "newrelic"
   account_id                 = "<account_id>"
@@ -12,7 +12,7 @@ resource "ngg_integration" "newrelic_integration_eu" {
   permissions_user           = "<permissions_user>"
 }
 
-resource "ngg_integration" "newrelic_integration_us" {
+resource "mcahr_integration" "newrelic_integration_us" {
   name                       = "newrelic_integration_us"
   service_name               = "newrelic"
   account_id                 = "<account_id>"

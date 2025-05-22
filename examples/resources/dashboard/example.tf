@@ -1,4 +1,4 @@
-resource "ngg_dashboard" "full_dashboard" {
+resource "mcahr_dashboard" "full_dashboard" {
   name           = "full_dashboard"
   dashboard_type = "TAGS_SEQUENCE"
   resource_query = "host"
@@ -30,7 +30,7 @@ resource "ngg_dashboard" "full_dashboard" {
 }
 
 
-resource "ngg_dashboard" "minimal_dashboard" {
+resource "mcahr_dashboard" "minimal_dashboard" {
   name           = "minimal_dashboard"
   dashboard_type = "TAGS_SEQUENCE"
 }

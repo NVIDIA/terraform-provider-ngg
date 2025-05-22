@@ -1,5 +1,5 @@
 
-resource "ngg_action" "cpu_threshold_action" {
+resource "mcahr_action" "cpu_threshold_action" {
   name = "cpu_threshold_action"
   # Evaluates current CPU usage and compares it to a parameter value named $cpu_threshold
   command = "`if [ $[100-$(vmstat 1 2|tail -1|awk '{print $15}')] -gt $cpu_threshold ]; then exit 1; fi`"

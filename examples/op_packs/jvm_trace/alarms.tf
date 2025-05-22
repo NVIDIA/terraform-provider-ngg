@@ -1,12 +1,12 @@
 
 # Alarm that triggers when the selected JVM heap usage exceeds the chosen size.
-resource "ngg_alarm" "jvm_trace_heap_alarm" {
+resource "mcahr_alarm" "jvm_trace_heap_alarm" {
   name        = "${var.namespace}_jvm_heap_alarm"
   description = "Alarm on JVM heap usage growing larger than a threshold."
   # The query that triggers the alarm: is the JVM memory usage greater than a threshold.
-  fire_query = "${ngg_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 1"
+  fire_query = "${mcahr_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 1"
   # The query that ends the alarm: is the JVM memory usage lower than the threshold.
-  clear_query = "${ngg_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 0"
+  clear_query = "${mcahr_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 0"
   # How often is the alarm evaluated. This is a more slowly changing metric, so every 60 seconds is fine.
   check_interval_sec = var.check_interval
   # User-provided resource selection

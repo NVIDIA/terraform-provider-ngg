@@ -1,5 +1,5 @@
 
-resource "ngg_alarm" "cpu_threshold_alarm" {
+resource "mcahr_alarm" "cpu_threshold_alarm" {
   fire_query = "cpu_threshold_action(cpu_threshold=75) == 1"
   name       = "cpu_threshold_alarm"
 

@@ -1,6 +1,6 @@
-# Terraform Provider Nvidia GPU Guardian (terraform-provider-ngg)
+# Terraform Provider NVIDIA Mission Control autonomous hardware recovery (terraform-provider-mcahr)
 
-The Terraform Nvidia GPU Guardian provider allows you to manage Nvidia GPU Guardian resources using [OpenTofu](https://opentofu.org/).
+The Terraform NVIDIA Mission Control autonomous hardware recovery provider allows you to manage NVIDIA Mission Control autonomous hardware recovery resources using [OpenTofu](https://opentofu.org/).
 
 ## Requirements
 

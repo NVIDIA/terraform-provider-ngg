@@ -29,9 +29,9 @@
 ################################################################################
 
 
-provider "ngg" {
+provider "mcahr" {
   # provider configuration here
-  #url = "${var.ngg_url}"
+  #url = "${var.mcahr_url}"
   retries = 2
   debug   = true
 }

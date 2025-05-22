@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    ngg = {
-      source = "nvidia/ngg"
+    mcahr = {
+      source = "NVIDIA/mcahr"
       #   select version here
       #   version = ">=1.15.26"
     }

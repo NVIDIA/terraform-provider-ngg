@@ -1,5 +1,5 @@
 
-resource "ngg_circuit_breaker" "full_circuit_breaker" {
+resource "mcahr_circuit_breaker" "full_circuit_breaker" {
   name                    = "full_circuit_breaker_name"
   command                 = "host | ${var.full_action_name}"
   breaker_type            = "soft"
@@ -13,7 +13,7 @@ resource "ngg_circuit_breaker" "full_circuit_breaker" {
 }
 
 
-resource "ngg_circuit_breaker" "minimal_circuit_breaker" {
+resource "mcahr_circuit_breaker" "minimal_circuit_breaker" {
   name       = "minimal_circuit_breaker"
   command    = "host | ${var.minimal_action_name}"
   hard_limit = 5

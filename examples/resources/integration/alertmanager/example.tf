@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "am0" {
+resource "mcahr_integration" "am0" {
   name             = "am0"
   serial_number    = "001"
   service_name     = "alertmanager"
@@ -8,7 +8,7 @@ resource "ngg_integration" "am0" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am1" {
+resource "mcahr_integration" "am1" {
   name             = "am1"
   serial_number    = "002"
   service_name     = "alertmanager"
@@ -17,7 +17,7 @@ resource "ngg_integration" "am1" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am2" {
+resource "mcahr_integration" "am2" {
   name             = "am2"
   serial_number    = "003"
   service_name     = "alertmanager"
@@ -26,7 +26,7 @@ resource "ngg_integration" "am2" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am3" {
+resource "mcahr_integration" "am3" {
   name             = "am3"
   serial_number    = "004"
   service_name     = "alertmanager"
@@ -35,7 +35,7 @@ resource "ngg_integration" "am3" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am4" {
+resource "mcahr_integration" "am4" {
   name             = "am4"
   serial_number    = "005"
   service_name     = "alertmanager"
@@ -44,7 +44,7 @@ resource "ngg_integration" "am4" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am5" {
+resource "mcahr_integration" "am5" {
   name             = "am5"
   serial_number    = "006"
   service_name     = "alertmanager"
@@ -53,7 +53,7 @@ resource "ngg_integration" "am5" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am6" {
+resource "mcahr_integration" "am6" {
   name             = "am6"
   serial_number    = "007"
   service_name     = "alertmanager"
@@ -62,7 +62,7 @@ resource "ngg_integration" "am6" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am7" {
+resource "mcahr_integration" "am7" {
   name             = "am7"
   serial_number    = "008"
   service_name     = "alertmanager"
@@ -71,7 +71,7 @@ resource "ngg_integration" "am7" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am8" {
+resource "mcahr_integration" "am8" {
   name             = "am8"
   serial_number    = "009"
   service_name     = "alertmanager"
@@ -80,7 +80,7 @@ resource "ngg_integration" "am8" {
   permissions_user = "<permissions_user>"
 }
 
-resource "ngg_integration" "am9" {
+resource "mcahr_integration" "am9" {
   name             = "am9"
   serial_number    = "010"
   service_name     = "alertmanager"

@@ -1,5 +1,5 @@
 
-resource "ngg_alarm" "full_alarm" {
+resource "mcahr_alarm" "full_alarm" {
   name               = "full_alarm"
   fire_query         = "(cpu_usage > 1 | sum(5)) >= 2.75"
   mute_query         = "(cpu_usage < 0 | sum(5)) >= 2.75"
@@ -27,7 +27,7 @@ resource "ngg_alarm" "full_alarm" {
 }
 
 
-resource "ngg_alarm" "minimal_alarm" {
+resource "mcahr_alarm" "minimal_alarm" {
   name       = "minimal_alarm"
   fire_query = "(cpu_usage > 1 | sum(5)) >= 2.75"
 }

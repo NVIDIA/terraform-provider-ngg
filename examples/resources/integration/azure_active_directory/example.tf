@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "azure_active_directory_integration" {
+resource "mcahr_integration" "azure_active_directory_integration" {
   name             = "azure_active_directory_integration"
   service_name     = "azure_active_directory"
   serial_number    = "001"

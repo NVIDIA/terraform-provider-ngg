@@ -1,5 +1,5 @@
 
-resource "ngg_report_template" "full_report_template" {
+resource "mcahr_report_template" "full_report_template" {
   name = "full_report_template"
   blocks = jsonencode([
     {
@@ -39,7 +39,7 @@ resource "ngg_report_template" "full_report_template" {
     }
   ])
   depends_on = [
-    ngg_report_template.minimal_report_template
+    mcahr_report_template.minimal_report_template
   ]
   links = jsonencode([{
     "label" : "minimal-report",
@@ -48,7 +48,7 @@ resource "ngg_report_template" "full_report_template" {
 }
 
 
-resource "ngg_report_template" "minimal_report_template" {
+resource "mcahr_report_template" "minimal_report_template" {
   name = "minimal_report_template"
   blocks = jsonencode([
     {

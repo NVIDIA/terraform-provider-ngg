@@ -1,5 +1,5 @@
 
-resource "ngg_principal" "full_principal" {
+resource "mcahr_principal" "full_principal" {
   name                  = "full_principal"
   identity              = "<full_identity_name>"
   idp_name              = "<idp_name>"
@@ -11,7 +11,7 @@ resource "ngg_principal" "full_principal" {
 }
 
 
-resource "ngg_principal" "minimal_principal" {
+resource "mcahr_principal" "minimal_principal" {
   name     = "minimal_principal"
   identity = "<minimal_identity_name>"
 }

@@ -1,5 +1,5 @@
 
-resource "ngg_file" "full_path_file" {
+resource "mcahr_file" "full_path_file" {
   name             = "full_path_file"
   input_file       = "${path.module}/../../../data/script_example.sh"
   destination_path = "/tmp/opcp_example.sh"
@@ -12,7 +12,7 @@ resource "ngg_file" "full_path_file" {
 }
 
 
-resource "ngg_file" "full_inline_file" {
+resource "mcahr_file" "full_inline_file" {
   name             = "full_inline_file"
   inline_data      = "<file_content>"
   destination_path = "/tmp/full_inline_file.txt"
@@ -25,7 +25,7 @@ resource "ngg_file" "full_inline_file" {
 }
 
 
-resource "ngg_file" "minimal_path_file" {
+resource "mcahr_file" "minimal_path_file" {
   name             = "minimal_path_file"
   input_file       = "${path.module}/../../../data/opcp_example.sh"
   destination_path = "/tmp/minimal_path_file.txt"
@@ -33,7 +33,7 @@ resource "ngg_file" "minimal_path_file" {
 }
 
 
-resource "ngg_file" "minimal_inline_file" {
+resource "mcahr_file" "minimal_inline_file" {
   name             = "minimal_inline_file"
   inline_data      = "<file_content>"
   destination_path = "/tmp/minimal_inline_file.txt"

@@ -1,6 +1,6 @@
 
 # Action to check the JVM heap usage on the selected resources and process.
-resource "ngg_action" "jvm_trace_check_heap" {
+resource "mcahr_action" "jvm_trace_check_heap" {
   name        = "${var.namespace}_jvm_check_heap"
   description = "Check heap utilization by process regex."
   # Parameters passed in: the regular expression to select process name.

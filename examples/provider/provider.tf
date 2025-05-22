@@ -1,14 +1,14 @@
 
 terraform {
   required_providers {
-    ngg = {
-      source  = "nvidia/ngg"
+    mcahr = {
+      source  = "NVIDIA/mcahr"
       version = ">= 1.0.6"
     }
   }
 }
 
-provider "ngg" {
+provider "mcahr" {
   # provider configuration here
   #token = "xyz1.asdfj.asd3fas..."
   url     = "https://<url>"

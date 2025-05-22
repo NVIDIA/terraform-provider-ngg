@@ -1,11 +1,11 @@
 ---
-page_title: "ngg_bot Resource - terraform-provider-ngg"
+page_title: "mcahr_bot Resource - terraform-provider-mcahr"
 subcategory: ""
 description: |-
   Alarms use Bots to execute automated Actions.
 ---
 
-# ngg_bot (Resource)
+# mcahr_bot (Resource)
 
 A Bot connects a single Alarm to one or more Actions. When the Alarm is raised the Bot fires all associated and enabled Actions to close the auto-remediation loop.
 
@@ -21,9 +21,9 @@ Each Bot has various configurable properties that determine its behavior. The mi
 The following example creates a Bot named `cpu_bot` that executes the `restart_action` Action when the `high_cpu_alarm` Alarm's fire_query is true:
 
 ```tf
-resource "ngg_bot" "cpu_bot" {
+resource "mcahr_bot" "cpu_bot" {
   name = "cpu_bot"
-  command = "if ${ ngg_alarm.high_cpu_alarm.name} then ${ ngg_action.restart_action.name} fi"
+  command = "if ${ mcahr_alarm.high_cpu_alarm.name} then ${ mcahr_action.restart_action.name} fi"
   description = "Restart on high CPU usage."
   enabled = true
 }
@@ -33,13 +33,13 @@ The `command` property specifies the Alarm and Action that are connected by this
 
 ### Advanced Usage
 
-Configuring a combination of an Alarm, Action, and Bot closes the fundamental auto-remediation loop provided by Nvidia GPU Guardian.  Below we're using portions of Nvidia GPU Guardian's JVM Op Pack to create a full incident automation loop when JVM memory usage gets too high.
+Configuring a combination of an Alarm, Action, and Bot closes the fundamental auto-remediation loop provided by NVIDIA Mission Control autonomous hardware recovery.  Below we're using portions of NVIDIA Mission Control autonomous hardware recovery's JVM Op Pack to create a full incident automation loop when JVM memory usage gets too high.
 
 First, the `jvm_trace_check_heap` Action determines if JVM heap usage exceeds a variable-defined threshold:
 
 ```terraform
 # Action to check the JVM heap usage on the selected resources and process.
-resource "ngg_action" "jvm_trace_check_heap" {
+resource "mcahr_action" "jvm_trace_check_heap" {
   name        = "${var.namespace}_jvm_check_heap"
   description = "Check heap utilization by process regex."
   # Parameters passed in: the regular expression to select process name.
@@ -63,13 +63,13 @@ The `jvm_trace_heap_alarm` Alarm executes the `jvm_trace_check_heap` Action as p
 
 ```terraform
 # Alarm that triggers when the selected JVM heap usage exceeds the chosen size.
-resource "ngg_alarm" "jvm_trace_heap_alarm" {
+resource "mcahr_alarm" "jvm_trace_heap_alarm" {
   name        = "${var.namespace}_jvm_heap_alarm"
   description = "Alarm on JVM heap usage growing larger than a threshold."
   # The query that triggers the alarm: is the JVM memory usage greater than a threshold.
-  fire_query = "${ngg_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 1"
+  fire_query = "${mcahr_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 1"
   # The query that ends the alarm: is the JVM memory usage lower than the threshold.
-  clear_query = "${ngg_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 0"
+  clear_query = "${mcahr_action.jvm_trace_check_heap.name}('${var.jvm_process_regex}') == 0"
   # How often is the alarm evaluated. This is a more slowly changing metric, so every 60 seconds is fine.
   check_interval_sec = var.check_interval
   # User-provided resource selection
@@ -104,7 +104,7 @@ We define another Action called `jvm_trace_jvm_debug` that executes a bash scrip
 
 ```tf
 # Action to dump the JVM stack-trace on the selected resources and process.
-resource "ngg_action" "jvm_trace_jvm_debug" {
+resource "mcahr_action" "jvm_trace_jvm_debug" {
   name = "${var.namespace}_jvm_dump_stack"
   description = "Dump JVM process (by regex) heap, thread and GC info to s3, then kill the pod."
   # Parameters passed in: the regular expression to select process name, and destination AWS S3 bucket.
@@ -130,12 +130,12 @@ Lastly, we connect the `jvm_trace_heap_alarm` Alarm and the `jvm_trace_check_hea
 
 ```terraform
 # Bot that fires the stack-dump action when the jvm heap exceeds the chosen memory threshold.
-resource "ngg_bot" "jvm_trace_dump_bot" {
+resource "mcahr_bot" "jvm_trace_dump_bot" {
   name        = "${var.namespace}_jvm_dump_bot"
   description = "Disk utilization handler bot"
   # If the JVM heap usage exceeds the threshold, dump the process stack, and push to AWS S3.
   # NOTE: Use a reference to the action and alarm, to ensure they are created and available before the bot.
-  command = "if ${ngg_alarm.jvm_trace_heap_alarm.name} then ${ngg_action.jvm_trace_jvm_debug.name}(JVM_PROCESS_REGEX='${var.jvm_process_regex}', S3_BUCKET='${var.s3_bucket}') fi"
+  command = "if ${mcahr_alarm.jvm_trace_heap_alarm.name} then ${mcahr_action.jvm_trace_jvm_debug.name}(JVM_PROCESS_REGEX='${var.jvm_process_regex}', S3_BUCKET='${var.s3_bucket}') fi"
 
   # general type of bot this can be "standard" or "custom"
   family = "custom"
@@ -146,7 +146,7 @@ resource "ngg_bot" "jvm_trace_dump_bot" {
 
 Now, anytime JVM memory exceeds our defined threshold the JVM is automatically restarted and the debug data is exported for further analysis.
 
--> See the Nvidia GPU Guardian Bots Documentation for more info.
+-> See the NVIDIA Mission Control autonomous hardware recovery Bots Documentation for more info.
 
 <!-- schema generated by tfplugindocs -->
 ## Schema

@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "okta_integration" {
+resource "mcahr_integration" "okta_integration" {
   name             = "okta_integration"
   service_name     = "okta"
   serial_number    = "001"

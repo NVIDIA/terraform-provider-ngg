@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "datadog_integration" {
+resource "mcahr_integration" "datadog_integration" {
   name             = "datadog_integration"
   service_name     = "datadog"
   site_url         = "https://app.datadoghq.com"

@@ -1,5 +1,5 @@
 
-resource "ngg_integration" "fluentbit_elastic_integration" {
+resource "mcahr_integration" "fluentbit_elastic_integration" {
   name          = "fluentbit_elastic_integration"
   service_name  = "fluentbit_elastic"
   api_url       = "http://0.0.0.0:9200"
