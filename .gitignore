@@ -1,0 +1,22 @@
+
+# generated executable
+terraform-provider-mcahr
+
+# vim swap files
+.*.swp
+.*.swo
+
+# terraform generated files
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+.terraform
+
+# idea files
+.idea
+
+# notes
+.notes
+
+# node
+node_modules
