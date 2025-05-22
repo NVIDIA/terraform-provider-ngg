@@ -1,6 +1,8 @@
 
 # generated executable
-terraform-provider
+terraform-provider-mcahr
+
+.DS_Store
 
 # vim swap files
 .*.swp
