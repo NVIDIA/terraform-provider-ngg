@@ -1,4 +1,4 @@
-// Copyright 2021, Shoreline Software Inc.
+// Copyright 2025 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 
 package provider
@@ -628,7 +628,7 @@ func TestAccResourcePrincipal(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "name", pre+"_principal"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "identity", "group_identity"),
-					// TODO: add a get_principal_class function in shoreline backend
+					// TODO: add a get_principal_class function in platform backend
 					// and return the appropriate idp_name using the idp_id from db
 					// otherwise it cannot be returned from symbol table manager
 					// resource.TestCheckResourceAttr(ProviderShortName + "_principal."+pre+"_principal", "idp_name", "azure"),

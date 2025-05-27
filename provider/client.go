@@ -1,4 +1,4 @@
-// Copyright 2021, Shoreline Software Inc.
+// Copyright 2025 NVIDIA Corporation
 // SPDX-License-Identifier: Apache-2.0
 
 package provider
@@ -151,7 +151,7 @@ func setHTTPClientOption(httpClient *http.Client) clientOption {
 	}
 }
 
-// Execute sends statement to shoreline backend
+// Execute sends statement to platform backend
 func (client *Client) Execute(statement string, suppressErrors bool) (ret []byte, err error) {
 	if !client.maybeRefreshAccessToken(suppressErrors) {
 		return []byte(""), fmt.Errorf("Access token refresh failed.")
