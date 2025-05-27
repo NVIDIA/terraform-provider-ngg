@@ -19,9 +19,6 @@ resource "mcahr_alarm" "jvm_trace_heap_alarm" {
   fire_long_template    = "JVM heap usage (process ${var.jvm_process_regex}) exceeded memory threshold ${var.mem_threshold} on ${var.resource_query}"
   resolve_long_template = "JVM heap usage (process ${var.jvm_process_regex}) below memory threshold ${var.mem_threshold} on ${var.resource_query}"
 
-  # low-frequency, and a linux command, so compiling won't help
-  compile_eligible = false
-
   # alarm is raised local to a resource (vs global)
   raise_for = "local"
   # raised on a linux command (not a standard metric)

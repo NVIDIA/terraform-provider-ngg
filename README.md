@@ -4,7 +4,7 @@ The Terraform NVIDIA Mission Control autonomous hardware recovery provider allow
 
 ## Requirements
 
-*   [OpenTofu](https://opentofu.org/docs/cli/install/) version 1.6.0 or later.
+*   [OpenTofu](https://opentofu.org/docs/cli/install/) version 1.8.5 or later.
 *   [Go](https://golang.org/doc/install) version 1.19 or later (to build the provider plugin).
 
 ## Example Usage

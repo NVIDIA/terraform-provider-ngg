@@ -7,7 +7,6 @@ resource "mcahr_alarm" "full_alarm" {
   description        = "Watch CPU usage."
   resource_query     = "host"
   check_interval_sec = 50
-  compile_eligible   = false
   condition_type     = "above"
   condition_value    = "10"
   metric_name        = "<metric_name>"

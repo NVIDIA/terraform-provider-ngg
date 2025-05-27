@@ -1,3 +1,4 @@
+# DEPRECATED: Use the `cells` field instead
 resource "mcahr_runbook" "data_runbook" {
   name        = "data_runbook"
   description = "A sample runbook defined using the data field, which loads the runbook configuration from a separate JSON file."
@@ -90,6 +91,7 @@ resource "mcahr_runbook" "full_runbook" {
   communication_execution_notifications = true
   filter_resource_to_action             = true
   enabled                               = true
+  secret_names                          = ["<secret_name_1>", "<secret_name_2>"]
 }
 
 

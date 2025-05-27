@@ -64,36 +64,7 @@ module "dashboard" {
   source = "../dashboard"
 }
 
-# =============================================================
-# The integration examples needs auth keys for each integration.
-# =============================================================
-
-# module "alertmanager" {
-#   source    = "../integration/alertmanager"
-# }
-
-# module "azure_active_directory" {
-#   source    = "../integration/azure_active_directory"
-# }
-
-# module "datadog" {
-#   source    = "../integration/datadog"
-# }
-
-# module "elastic" {
-#   source    = "../integration/elastic"
-# }
-
-# module "fluentbit" {
-#   source    = "../integration/fluentbit"
-# }
-
-# module "newrelic" {
-#   source    = "../integration/newrelic"
-# }
-
-# module "okta" {
-#   source    = "../integration/okta"
-# }
-
+# This needs auth keys for each integration.
+# module "integration" {
+#   source    = "../integration"
 

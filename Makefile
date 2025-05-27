@@ -75,24 +75,24 @@ scan:
 
 EXAMPLES_ROOT_PATH=./examples/resources/_root
 
-init_ex: 
+init_ex:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) init
 
-apply_ex: 
+apply_ex:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) apply --auto-approve
 
-apply_ex_na: 
+apply_ex_na:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) apply
 
-destroy_ex: 
+destroy_ex:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) destroy --auto-approve
 
-destroy_ex_na: 
+destroy_ex_na:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) destroy
 
-plan_ex: 
+plan_ex:
 	MCAHR_URL=$(MCAHR_URL) MCAHR_TOKEN=$(MCAHR_TOKEN) MCAHR_DEBUG=$(MCAHR_DEBUG) tofu -chdir=$(EXAMPLES_ROOT_PATH) plan
 
 .PHONY: distclean_ex
-distclean_ex: 
+distclean_ex:
 	rm -rf $(EXAMPLES_ROOT_PATH)/terraform.tfstate $(EXAMPLES_ROOT_PATH)/terraform.tfstate.backup $(EXAMPLES_ROOT_PATH)/.terraform $(EXAMPLES_ROOT_PATH)/.terraform.lock.hcl

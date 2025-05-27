@@ -1,0 +1,19 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // "runArgs": ["--network=shoreline-net"],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "waderyan.gitblame",
+                "golang.go",
+                "github.vscode-github-actions",
+                "HashiCorp.terraform"
+            ],
+            "settings": {
+                "remote.autoForwardPorts": false
+            }
+        }
+    }
+}
