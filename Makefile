@@ -9,7 +9,7 @@ default: install
 REPODIR=/tmp/tf-repo/providers
 
 BINARY=terraform-provider-mcahr
-VERSION=1.15.30
+VERSION=1.15.39
 
 BUILD_ENV_VARS=-ldflags "-X 'main.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'main.ProviderShortName=\"mcahr\"' -X 'provider.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'provider.ProviderShortName=\"mcahr\"' -X 'provider.EnvVarsNamePrefix=\"MCAHR\"' -X 'provider.TfLogFile=\"/tmp/tf_provider.log\"' -X 'provider.DefaultUserName=\"NVIDIA\"'"
 

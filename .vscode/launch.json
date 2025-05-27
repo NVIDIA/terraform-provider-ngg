@@ -12,7 +12,7 @@
             "args": [
                 "-debug",
             ],
-            "envFile": "${workspaceFolder}/generator/env/dev/local.env"
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
