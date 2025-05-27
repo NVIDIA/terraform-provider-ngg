@@ -140,7 +140,7 @@ resource "mcahr_report_template" "minimal_report_template" {
 ### Required
 
 - `blocks` (String) The JSON encoded blocks of the report template.
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 

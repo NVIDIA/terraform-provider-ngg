@@ -89,18 +89,18 @@ variable "s3_bucket" {
 ### Required
 
 - `destination_path` (String) Target location for a copied distributed File object.
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 - `resource_query` (String) A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions.
 
 ### Optional
 
-- `description` (String) A user-friendly explanation of an object.
+- `description` (String) A user-friendly explanation of an object. Defaults to ``.
 - `enabled` (Boolean) If the object is currently enabled or disabled. Defaults to `false`.
-- `inline_data` (String) The inline file data of a distributed File object. (conflicts with input_file)
-- `input_file` (String) The local source of a distributed File object. (conflicts with inline_data)
-- `md5` (String) The md5 checksum of a file, e.g. filemd5("${path.module}/data/example-file.txt")
-- `mode` (String) The File's permissions, like 'chmod', in octal (e.g. '0644').
-- `owner` (String) The File's ownership, like 'chown' (e.g. 'user:group').
+- `inline_data` (String) The inline file data of a distributed File object. (conflicts with input_file) Defaults to ``.
+- `input_file` (String) The local source of a distributed File object. (conflicts with inline_data) Defaults to ``.
+- `md5` (String) The md5 checksum of a file, e.g. filemd5("${path.module}/data/example-file.txt") Defaults to ``.
+- `mode` (String) The File's permissions, like 'chmod', in octal (e.g. '0644'). Defaults to ``.
+- `owner` (String) The File's ownership, like 'chown' (e.g. 'user:group'). Defaults to ``.
 
 ### Read-Only
 

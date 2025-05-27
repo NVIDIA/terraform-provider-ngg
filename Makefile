@@ -16,7 +16,7 @@ BUILD_ENV_VARS=-ldflags "-X 'main.RenderedProviderName=\"NVIDIA Mission Control 
 
 // NOTE: this only works for 64 bit linux and MacOs ("darwin")
 OS=$(shell uname | tr 'A-Z' 'a-z')
-SUBPATH=NVIDIA/mcahr/local/mcahr/$(VERSION)/$(OS)_amd64
+SUBPATH=registry.opentofu.org/NVIDIA/mcahr/local/mcahr/$(VERSION)/$(OS)_amd64
 
 generate:
 	go generate $(BUILD_ENV_VARS)
@@ -44,7 +44,7 @@ install: build
 use_local: 
 	@echo 'Setting up local overrides for terraform provider in ~/.terraformrc'
 	@echo 'NOTE: You need to re-run "make use_local" when the version changes."'
-	@echo 'provider_installation { dev_overrides { "NVIDIA/mcahr" = "$(REPODIR)/$(SUBPATH)" } }' > ${HOME}/.terraformrc
+	@echo 'provider_installation { dev_overrides { "registry.opentofu.org/NVIDIA/mcahr" = "$(REPODIR)/$(SUBPATH)" } }' > ${HOME}/.terraformrc
 
 use_registry: 
 	@echo 'Removing ~/.terraformrc, to use the terraform registry again'

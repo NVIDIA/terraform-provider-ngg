@@ -221,7 +221,6 @@ func TestAccResourceAlarm(t *testing.T) {
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "resolve_long_template", "resolved..."),
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "raise_for", "local"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "check_interval_sec", "50"),
-					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "compile_eligible", "false"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "resource_type", "HOST"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "family", "custom"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_alarm."+pre+"_cpu_alarm", "metric_name", "cpu_usage"),
@@ -247,7 +246,6 @@ func buildMockAccResourceAlarm(prefix string, full bool) string {
 			resolve_long_template   = "resolved..."
 			raise_for               = "local"
 			check_interval_sec      = 50
-			compile_eligible        = false
 			resource_type           = "HOST"
 			family                  = "custom"
 			metric_name             = "cpu_usage"

@@ -37,12 +37,12 @@ resource "mcahr_resource" "az_k8s" {
 
 ### Required
 
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 - `value` (String) The Op statement that defines a Metric or Resource.
 
 ### Optional
 
-- `description` (String) A user-friendly explanation of an object.
+- `description` (String) A user-friendly explanation of an object. Defaults to ``.
 - `params` (List of String) Named variables to pass to an object (e.g. an Action).
 
 ### Read-Only

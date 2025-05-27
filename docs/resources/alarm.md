@@ -110,29 +110,28 @@ resource "mcahr_alarm" "jvm_trace_heap_alarm" {
 ### Required
 
 - `fire_query` (String) The trigger condition for an Alarm (general expression) or the TimeTrigger (e.g. 'every 5m').
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
 - `check_interval_sec` (String) Defaults to `1`.
-- `clear_query` (String) The Alarm's resolution condition.
-- `compile_eligible` (Boolean) If the Alarm can be effectively optimized. Defaults to `true`.
-- `condition_type` (String) Kind of check in an Alarm (e.g. above or below) vs a threshold for a Metric.
-- `condition_value` (String) Switching value (threshold) for a Metric in an Alarm.
-- `description` (String) A user-friendly explanation of an object.
+- `clear_query` (String) The Alarm's resolution condition. Defaults to ``.
+- `condition_type` (String) Kind of check in an Alarm (e.g. above or below) vs a threshold for a Metric. Defaults to ``.
+- `condition_value` (String) Switching value (threshold) for a Metric in an Alarm. Defaults to ``.
+- `description` (String) A user-friendly explanation of an object. Defaults to ``.
 - `enabled` (Boolean) If the object is currently enabled or disabled. Defaults to `false`.
 - `family` (String) General class for an Action or Bot (e.g., custom, standard, metric, or system check). Defaults to `custom`.
-- `fire_long_template` (String) The long description of the Alarm's triggering condition.
-- `fire_short_template` (String) The short description of the Alarm's triggering condition.
-- `fire_title_template` (String) UI title of the Alarm's triggering condition.
-- `metric_name` (String) The Alarm's triggering Metric.
-- `mute_query` (String) The Alarm's mute condition.
+- `fire_long_template` (String) The long description of the Alarm's triggering condition. Defaults to ``.
+- `fire_short_template` (String) The short description of the Alarm's triggering condition. Defaults to ``.
+- `fire_title_template` (String) UI title of the Alarm's triggering condition. Defaults to ``.
+- `metric_name` (String) The Alarm's triggering Metric. Defaults to ``.
+- `mute_query` (String) The Alarm's mute condition. Defaults to ``.
 - `raise_for` (String) Where an Alarm is raised (e.g., local to a resource, or global to the system). Defaults to `local`.
-- `resolve_long_template` (String) The long description of the Alarm's resolution.
-- `resolve_short_template` (String) The short description of the Alarm's resolution.
-- `resolve_title_template` (String) UI title of the Alarm's' resolution.
-- `resource_query` (String) A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions.
-- `resource_type` (String)
+- `resolve_long_template` (String) The long description of the Alarm's resolution. Defaults to ``.
+- `resolve_short_template` (String) The short description of the Alarm's resolution. Defaults to ``.
+- `resolve_title_template` (String) UI title of the Alarm's' resolution. Defaults to ``.
+- `resource_query` (String) A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions. Defaults to ``.
+- `resource_type` (String) Defaults to ``.
 
 ### Read-Only
 

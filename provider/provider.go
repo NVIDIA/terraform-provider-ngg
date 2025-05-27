@@ -423,7 +423,7 @@ func GetBackendVersionInfo() (build string, version string, major int64, minor i
 		return
 	}
 	version = GetNestedValueOrDefault(buildJs, ToKeyPath("tag"), "unknown").(string)
-	if strings.HasPrefix(version, "stable") || strings.HasPrefix(version, "release") {
+	if strings.HasPrefix(version, "stable") || strings.HasPrefix(version, "release") || strings.HasPrefix(version, "arm") {
 		// parse out '\d+\.\d+.\d+' suffix
 		major, minor, patch, err = ExtractVersionData(version)
 	} else {
@@ -477,21 +477,21 @@ func New(version string) func() *schema.Provider {
 			//	ProviderShortName + "_datasource": dataSourceObject(),
 			//},
 			ResourcesMap: map[string]*schema.Resource{
-				ProviderShortName + "_action":          resourceObject(ObjectConfigJsonStr, "action"),
-				ProviderShortName + "_alarm":           resourceObject(ObjectConfigJsonStr, "alarm"),
-				ProviderShortName + "_time_trigger":    resourceObject(ObjectConfigJsonStr, "time_trigger"),
-				ProviderShortName + "_bot":             resourceObject(ObjectConfigJsonStr, "bot"),
-				ProviderShortName + "_circuit_breaker": resourceObject(ObjectConfigJsonStr, "circuit_breaker"),
-				ProviderShortName + "_file":            resourceObject(ObjectConfigJsonStr, "file"),
-				ProviderShortName + "_integration":     resourceObject(ObjectConfigJsonStr, "integration"),
-				ProviderShortName + "_metric":          resourceObject(ObjectConfigJsonStr, "metric"),
-				ProviderShortName + "_notebook":        resourceObject(ObjectConfigJsonStr, "notebook"),
-				ProviderShortName + "_runbook":         resourceObject(ObjectConfigJsonStr, "notebook"), // alias <name>_runbook to <name>_notebook
-				ProviderShortName + "_principal":       resourceObject(ObjectConfigJsonStr, "principal"),
-				ProviderShortName + "_resource":        resourceObject(ObjectConfigJsonStr, "resource"),
-				ProviderShortName + "_system_settings": resourceObject(ObjectConfigJsonStr, "system_settings"),
-				ProviderShortName + "_report_template": resourceObject(ObjectConfigJsonStr, "report_template"),
-				ProviderShortName + "_dashboard":       resourceObject(ObjectConfigJsonStr, "dashboard"),
+				ProviderShortName + "_action":          ResourceObject(ObjectConfigJsonStr, "action"),
+				ProviderShortName + "_alarm":           ResourceObject(ObjectConfigJsonStr, "alarm"),
+				ProviderShortName + "_time_trigger":    ResourceObject(ObjectConfigJsonStr, "time_trigger"),
+				ProviderShortName + "_bot":             ResourceObject(ObjectConfigJsonStr, "bot"),
+				ProviderShortName + "_circuit_breaker": ResourceObject(ObjectConfigJsonStr, "circuit_breaker"),
+				ProviderShortName + "_file":            ResourceObject(ObjectConfigJsonStr, "file"),
+				ProviderShortName + "_integration":     ResourceObject(ObjectConfigJsonStr, "integration"),
+				ProviderShortName + "_metric":          ResourceObject(ObjectConfigJsonStr, "metric"),
+				ProviderShortName + "_notebook":        ResourceObject(ObjectConfigJsonStr, "notebook"),
+				ProviderShortName + "_runbook":         ResourceObject(ObjectConfigJsonStr, "notebook"), // alias <name>_runbook to <name>_notebook
+				ProviderShortName + "_principal":       ResourceObject(ObjectConfigJsonStr, "principal"),
+				ProviderShortName + "_resource":        ResourceObject(ObjectConfigJsonStr, "resource"),
+				ProviderShortName + "_system_settings": ResourceObject(ObjectConfigJsonStr, "system_settings"),
+				ProviderShortName + "_report_template": ResourceObject(ObjectConfigJsonStr, "report_template"),
+				ProviderShortName + "_dashboard":       ResourceObject(ObjectConfigJsonStr, "dashboard"),
 			},
 			DataSourcesMap: map[string]*schema.Resource{
 				ProviderShortName + "_version": &schema.Resource{
@@ -641,19 +641,19 @@ func configure(version string, p *schema.Provider) func(ctx context.Context, d *
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-func resourceObject(configJsStr string, key string) *schema.Resource {
+func ResourceObject(configJsStr string, key string) *schema.Resource {
 	params := map[string]*schema.Schema{}
 
 	objects := map[string]interface{}{}
 	// Parsing/Unmarshalling JSON encoding/json
 	err := json.Unmarshal([]byte(configJsStr), &objects)
 	if err != nil {
-		WriteMsg("WARNING: Failed to parse JSON config from resourceObject().\n")
+		WriteMsg("WARNING: Failed to parse JSON config from ResourceObject().\n")
 		return nil
 	}
 	object := GetNestedValueOrDefault(objects, ToKeyPath(key), nil)
 	if object == nil {
-		WriteMsg("WARNING: Failed to parse JSON config from resourceObject(%s).\n", key)
+		WriteMsg("WARNING: Failed to parse JSON config from ResourceObject(%s).\n", key)
 		return nil
 	}
 	attributes := GetNestedValueOrDefault(object, ToKeyPath("attributes"), map[string]interface{}{}).(map[string]interface{})
@@ -782,15 +782,6 @@ func resourceObject(configJsStr string, key string) *schema.Resource {
 			//}
 		case "string":
 			sch.Type = schema.TypeString
-
-			if key == "principal" && k == "idp_name" {
-				sch.DiffSuppressFunc = func(diffKey, old, nu string, d *schema.ResourceData) bool {
-					// TODO: add a get_principal_class function in shoreline backend
-					// and return the appropriate idp_name using the idp_id from db
-					// otherwise it cannot be returned from symbol table manager
-					return diffKey == "idp_name"
-				}
-			}
 		case "string[]":
 			sch.Type = schema.TypeList
 			sch.Elem = &schema.Schema{
@@ -896,15 +887,13 @@ func resourceObject(configJsStr string, key string) *schema.Resource {
 		if replacesField != "" {
 			sch.ConflictsWith = []string{replacesField}
 		}
-		//WriteMsg("WARNING: JSON config from resourceObject(%s) %s.Optional = %+v.\n", key, k, sch.Optional)
-		//WriteMsg("WARNING: JSON config from resourceObject(%s) %s.Required = %+v.\n", key, k, sch.Required)
-		//WriteMsg("WARNING: JSON config from resourceObject(%s) %s.Computed = %+v.\n", key, k, sch.Computed)
+		//WriteMsg("WARNING: JSON config from ResourceObject(%s) %s.Optional = %+v.\n", key, k, sch.Optional)
+		//WriteMsg("WARNING: JSON config from ResourceObject(%s) %s.Required = %+v.\n", key, k, sch.Required)
+		//WriteMsg("WARNING: JSON config from ResourceObject(%s) %s.Computed = %+v.\n", key, k, sch.Computed)
 		//defowlt := GetNestedValueOrDefault(attrMap, ToKeyPath("value"), nil)
-		defowlt := GetNestedValueOrDefault(attrMap, ToKeyPath("default"), nil)
-		if defowlt != nil {
-			//appendActionLogInner(fmt.Sprintf("NOTE: DEFAULT resourceObject(%s) %s.Default = %+v.\n", key, k, defowlt))
-			sch.Default = defowlt
-		}
+		sch, defowlt := SetAttributeDefaultValue(attrMap, sch)
+		//appendActionLogInner(fmt.Sprintf("NOTE: DEFAULT ResourceObject(%s) %s.Default = %+v.\n", key, k, defowlt))
+
 		suppressNullDiffRegex, isStr := GetNestedValueOrDefault(attrMap, ToKeyPath("suppress_null_regex"), nil).(string)
 		if isStr {
 			sch.DiffSuppressFunc = func(k, old, nu string, d *schema.ResourceData) bool {
@@ -1048,10 +1037,10 @@ func resourceObject(configJsStr string, key string) *schema.Resource {
 	return &schema.Resource{
 		Description: RenderedProviderName + " " + key + ". " + objDescription,
 
-		CreateContext: resourceObjectCreate(key, primary, attributes, objectDef),
-		ReadContext:   resourceObjectRead(key, attributes, objectDef),
-		UpdateContext: resourceObjectUpdate(key, attributes, objectDef),
-		DeleteContext: resourceObjectDelete(key, objectDef),
+		CreateContext: ResourceObjectCreate(key, primary, attributes, objectDef),
+		ReadContext:   ResourceObjectRead(key, attributes, objectDef),
+		UpdateContext: ResourceObjectUpdate(key, attributes, objectDef),
+		DeleteContext: ResourceObjectDelete(key, objectDef),
 		Importer:      &schema.ResourceImporter{State: schema.ImportStatePassthrough},
 
 		Schema: params,
@@ -1194,24 +1183,46 @@ func NormalizeNotebookCells(cells *[]interface{}) {
 		}
 		enabled := GetNestedValueOrDefault(vmap, ToKeyPath("enabled"), nil)
 		name := GetNestedValueOrDefault(vmap, ToKeyPath("name"), nil)
+
 		if enabled == nil {
 			vmap["enabled"] = true
 		}
 		if name == nil {
 			vmap["name"] = "unnamed"
 		}
+
+		backendVersion := GetBackendVersionInfoStruct()
+		if IsSecretAwareSupported(backendVersion) {
+			secret_aware := GetNestedValueOrDefault(vmap, ToKeyPath("secret_aware"), nil)
+			// set secret_aware only if backend version >= 28.1 && backend_version != 28.3
+			if secret_aware == nil {
+				vmap["secret_aware"] = false
+			}
+		} else {
+			// Explicitly remove secret_aware if backend version doesn't support it
+			delete(vmap, "secret_aware")
+		}
 	}
 }
 
+func IsSecretAwareSupported(backendVersion VersionRecord) bool {
+	if backendVersion.Major > 28 {
+		return true
+	}
+	if backendVersion.Major == 28 {
+		return (backendVersion.Minor == 1 && backendVersion.Patch >= 54) ||
+			(backendVersion.Minor == 2 && backendVersion.Patch >= 4) ||
+			backendVersion.Minor > 3
+	}
+	return false // Covers Major < 28
+}
+
 func EscapeString(val interface{}) string {
-	out := fmt.Sprintf("%s", val)
+	str := fmt.Sprintf("%s", val)
 
-	slash := regexp.MustCompile(`\\`)
-	out = slash.ReplaceAllString(out, "\\\\")
-	quote := regexp.MustCompile(`"`)
-	out = quote.ReplaceAllString(out, "\\\"")
+	quoted_str := strconv.Quote(str)
 
-	return out
+	return quoted_str[1 : len(quoted_str)-1]
 }
 
 func SortListByStrVal(val []interface{}) []interface{} {
@@ -1230,36 +1241,56 @@ func SortListByStrVal(val []interface{}) []interface{} {
 	return sortedCopy
 }
 
-func attrValueDefault(attrTyp string) interface{} {
+// AttrValueDefault returns the default value for a given attribute type
+// Used for both schema defaults and when no value is provided in configuration
+func AttrValueDefault(attrTyp string) interface{} {
 	switch attrTyp {
-	case "command":
+	case "string", "command", "time_s", "label", "resource", "b64json":
 		return ""
-	case "time_s":
-		return ""
-	case "b64json":
-		return ""
-	case "string":
-		return ""
-	case "string[]":
-		return []string{}
-	case "string_set":
-		return []string{}
-	case "bool":
+	case "bool", "intbool":
 		return false
-	case "intbool": // special handling to/from backend ("1"/"0")
-		return false
-	case "float":
-		return float64(0)
 	case "int":
 		return int(0)
 	case "unsigned":
 		return uint(0)
-	case "label":
-		return ""
-	case "resource":
+	case "float":
+		return float64(0)
+	case "string[]", "string_set":
+		return []string{}
+	default:
 		return ""
 	}
-	return ""
+}
+
+// SetAttributeDefaultValue sets the default value for a schema attribute based on the attribute map configuration.
+// If the attribute is required or computed, no default is set. Also, defaults are not set for list or set types
+// as they're not supported by Terraform. Otherwise, it will use either the explicitly specified default
+// from the attribute map, or fall back to a type-specific default value if none is specified.
+func SetAttributeDefaultValue(attrMap map[string]interface{}, sch *schema.Schema) (*schema.Schema, interface{}) {
+	required := GetNestedValueOrDefault(attrMap, ToKeyPath("required"), false).(bool)
+	computed := GetNestedValueOrDefault(attrMap, ToKeyPath("computed"), false).(bool)
+	attrTyp := GetNestedValueOrDefault(attrMap, ToKeyPath("type"), "string").(string)
+
+	// Don't set default if the field is required or computed
+	if required || computed {
+		return sch, nil
+	}
+
+	// Don't set default for list or set types (string[] or string_set)
+	if attrTyp == "string[]" || attrTyp == "string_set" {
+		return sch, nil
+	}
+
+	defowlt := GetNestedValueOrDefault(attrMap, ToKeyPath("default"), nil)
+
+	if defowlt == nil {
+		// If no default is specified, use the type-specific default
+		defowlt = AttrValueDefault(attrTyp)
+	}
+
+	sch.Default = defowlt
+
+	return sch, defowlt
 }
 
 func attrValueString(typ string, key string, val interface{}, attrs map[string]interface{}) string {
@@ -1480,7 +1511,7 @@ func shouldSkipSetField(key string, val interface{}, name string, typ string, at
 			val, exists := d.GetOk(key)
 			defowlt := GetNestedValueOrDefault(attrs, ToKeyPath(key+".default"), nil)
 			if defowlt == nil {
-				defowlt = attrValueDefault(attrTyp)
+				defowlt = AttrValueDefault(attrTyp)
 			}
 			appendActionLog(fmt.Sprintf("Set (checking min_ver): %s: '%s'.'%s' exists(%v) val(%v : %T) default(%v : %T) ver(%v) backend_ver(%v)\n", typ, name, key, exists, val, val, defowlt, defowlt, min_ver, backendVersion.Version))
 			// NOTE: because of the bug in GetOk(), we can't know for sure if the value is set in the TF HCL
@@ -1656,11 +1687,11 @@ func updateSystemSettings(attrs map[string]interface{}, objectDef map[string]int
 	return nil
 }
 
-func resourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef map[string]interface{}, ctx context.Context, d *schema.ResourceData, meta interface{}, doDiff bool, isCreate bool) diag.Diagnostics {
+func ResourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef map[string]interface{}, ctx context.Context, d *schema.ResourceData, meta interface{}, doDiff bool, isCreate bool) diag.Diagnostics {
 	var diags diag.Diagnostics
 	name := d.Get("name").(string)
 	// valid-variable-name check (and non-null)
-	appendActionLog(fmt.Sprintf("RESOURCE TYPE IS: %s (resourceObjectSetFields)\n", typ))
+	appendActionLog(fmt.Sprintf("RESOURCE TYPE IS: %s (ResourceObjectSetFields)\n", typ))
 
 	specialSkipFields := map[string]bool{}
 	if typ == "notebook" || typ == "runbook" {
@@ -1865,13 +1896,27 @@ func resourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef
 		}
 	}
 
+	if typ == "principal" {
+		orderedAttrs = append(orderedAttrs, "idp_name")
+	}
+
 	for key, _ := range attrs {
+		forceUpdate := GetNestedValueOrDefault(attrs, ToKeyPath(key+".force_update"), false).(bool)
+		if forceUpdate {
+			forcedUpdate[CastToString(key)] = forceUpdate
+		}
+
+		if typ == "principal" && key == "idp_name" {
+			continue
+		}
+
 		if skipKeys[key] != true {
 			orderedAttrs = append(orderedAttrs, key)
 		} else {
 			appendActionLog(fmt.Sprintf("Notebook skipping key: %s\n", key))
 		}
 	}
+
 	if typ == "notebook" || typ == "runbook" {
 		// XXX: work around backend issue with data-dependent ordering
 		aVal, _ := d.Get("allowed_entities").([]interface{})
@@ -1919,6 +1964,10 @@ func resourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef
 				appendActionLog(fmt.Sprintf("Bot running post-ctor set: %s: '%s'.'%s'  HasChange(%v)\n", typ, name, key, d.HasChange(key)))
 				forceSet = true
 			}
+		}
+
+		if typ == "principal" && key == "idp_name" {
+			forceSet = true
 		}
 
 		// NOTE: Terraform reports !exists when a value is explicitly supplied, but matches the 'default'
@@ -2015,7 +2064,7 @@ func notebookIsInline(typ string, attrs map[string]interface{}, objectDef map[st
 	return false
 }
 
-func resourceObjectCreate(typ string, primary string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func ResourceObjectCreate(typ string, primary string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		// use the meta value to retrieve your client from the provider configure method
 		// client := meta.(*apiClient)
@@ -2040,7 +2089,7 @@ func resourceObjectCreate(typ string, primary string, attrs map[string]interface
 			// once the object is ok, set the ID to tell terraform it's valid...
 			d.SetId(name)
 			// update the data in terraform
-			return resourceObjectUpdate(typ, attrs, objectDef)(ctx, d, meta)
+			return ResourceObjectUpdate(typ, attrs, objectDef)(ctx, d, meta)
 		}
 
 		primaryValStr := attrValueString(typ, primary, primaryVal, attrs)
@@ -2073,22 +2122,22 @@ func resourceObjectCreate(typ string, primary string, attrs map[string]interface
 			return diags
 		}
 
-		diags = resourceObjectSetFields(typ, attrs, objectDef, ctx, d, meta, false, true)
+		diags = ResourceObjectSetFields(typ, attrs, objectDef, ctx, d, meta, false, true)
 		if diags != nil {
 			// delete incomplete object
-			resourceObjectDelete(typ, objectDef)(ctx, d, meta)
+			ResourceObjectDelete(typ, objectDef)(ctx, d, meta)
 			return diags
 		}
 
 		// once the object is ok, set the ID to tell terraform it's valid...
 		d.SetId(name)
 		// update the data in terraform
-		return resourceObjectRead(typ, attrs, objectDef)(ctx, d, meta)
+		return ResourceObjectRead(typ, attrs, objectDef)(ctx, d, meta)
 	}
 }
 
 // returns skip, value, diagnostics
-func resourceObjectReadSingleAttr(name string, typ string, key string, attrs map[string]interface{}, record map[string]interface{}, stepsJs map[string]interface{}, d *schema.ResourceData, alias string, aliasMap map[string]interface{}) (bool, interface{}, diag.Diagnostics) {
+func ResourceObjectReadSingleAttr(name string, typ string, key string, attrs map[string]interface{}, record map[string]interface{}, stepsJs map[string]interface{}, d *schema.ResourceData, alias string, aliasMap map[string]interface{}) (bool, interface{}, diag.Diagnostics) {
 	var val interface{}
 	attr := GetNestedValueOrDefault(attrs, ToKeyPath(key), map[string]interface{}{})
 	if alias != "" {
@@ -2276,7 +2325,7 @@ func SetSingleAttrFromRead(typ string, name string, key string, val interface{},
 	}
 }
 
-func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func ResourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		// use the meta value to retrieve your client from the provider configure method
 		// client := meta.(*apiClient)
@@ -2401,7 +2450,7 @@ func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 		aliasKeyVal := ""
 		aliasMap := map[string]interface{}{}
 		if aliasKey != "" {
-			_, aliasKeyValIfc, diags := resourceObjectReadSingleAttr(name, typ, aliasKey, attrs, record, stepsJs, d, "", nil)
+			_, aliasKeyValIfc, diags := ResourceObjectReadSingleAttr(name, typ, aliasKey, attrs, record, stepsJs, d, "", nil)
 			if diags != nil {
 				return diags
 			}
@@ -2409,7 +2458,7 @@ func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 			aliasMap = GetNestedValueOrDefault(objectDef, ToKeyPath("internal.alias.map."+aliasKeyVal), map[string]interface{}{}).(map[string]interface{})
 		}
 
-		readFirst := map[string]bool{"enable": true, "cells": true}
+		readFirst := map[string]bool{"enable": true, "cells": true, "secret_aware": true}
 		attrFirst := []string{}
 		attrList := []string{}
 
@@ -2438,7 +2487,7 @@ func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 			}
 
 			curAlias, _ := GetNestedValueOrDefault(aliasMap, ToKeyPath(key+".alias_out"), "").(string)
-			skip, val, diags := resourceObjectReadSingleAttr(name, typ, key, attrs, record, stepsJs, d, curAlias, aliasMap)
+			skip, val, diags := ResourceObjectReadSingleAttr(name, typ, key, attrs, record, stepsJs, d, curAlias, aliasMap)
 
 			if diags != nil {
 				return diags
@@ -2464,10 +2513,18 @@ func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 				appendActionLog(fmt.Sprintf("Reading deprecated/renamed field : %s: '%s'.'%s'->'%s'  '%v'\n", typ, name, key, deprecatedFor, val))
 				_, isSet := d.GetOk(key)
 				if isSet {
-					_, val, diags = resourceObjectReadSingleAttr(name, typ, key, attrs, record, stepsJs, d, curAlias, aliasMap)
+					_, val, diags = ResourceObjectReadSingleAttr(name, typ, key, attrs, record, stepsJs, d, curAlias, aliasMap)
 				}
 			}
 			if val == nil {
+				if typ == "principal" && key == "idp_name" {
+					currentVal, _ := d.GetOk("idp_name")
+					if currentVal != nil {
+						d.Set("idp_name", currentVal)
+					}
+					continue
+				}
+
 				// not found, so check for a default value and assume that
 				defowlt := GetNestedValueOrDefault(attrs, ToKeyPath(key+".default"), nil)
 				if defowlt != nil {
@@ -2505,7 +2562,7 @@ func resourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 	}
 }
 
-func resourceObjectUpdate(typ string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func ResourceObjectUpdate(typ string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		// use the meta value to retrieve your client from the provider configure method
 		// client := meta.(*apiClient)
@@ -2517,7 +2574,7 @@ func resourceObjectUpdate(typ string, attrs map[string]interface{}, objectDef ma
 		if typ == "system_settings" {
 			diags = updateSystemSettings(attrs, objectDef, ctx, d, meta)
 		} else {
-			diags = resourceObjectSetFields(typ, attrs, objectDef, ctx, d, meta, true, false)
+			diags = ResourceObjectSetFields(typ, attrs, objectDef, ctx, d, meta, true, false)
 		}
 		if diags != nil {
 			// TODO delete incomplete object?
@@ -2525,11 +2582,11 @@ func resourceObjectUpdate(typ string, attrs map[string]interface{}, objectDef ma
 		}
 
 		// update the data in terraform
-		return resourceObjectRead(typ, attrs, objectDef)(ctx, d, meta)
+		return ResourceObjectRead(typ, attrs, objectDef)(ctx, d, meta)
 	}
 }
 
-func resourceObjectDelete(typ string, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func ResourceObjectDelete(typ string, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 		// use the meta value to retrieve your client from the provider configure method
 		// client := meta.(*apiClient)

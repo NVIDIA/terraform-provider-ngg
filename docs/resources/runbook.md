@@ -3,12 +3,12 @@
 page_title: "mcahr_runbook Resource - terraform-provider-mcahr"
 subcategory: ""
 description: |-
-  NVIDIA Mission Control autonomous hardware recovery notebook. An interactive notebook of Op commands and user documentation .
+  NVIDIA Mission Control autonomous hardware recovery notebook. An interactive notebook of Op commands and user documentation.
 ---
 
 # mcahr_runbook (Resource)
 
-NVIDIA Mission Control autonomous hardware recovery notebook. An interactive notebook of Op commands and user documentation .
+NVIDIA Mission Control autonomous hardware recovery notebook. An interactive notebook of Op commands and user documentation.
 
 
 
@@ -17,29 +17,30 @@ NVIDIA Mission Control autonomous hardware recovery notebook. An interactive not
 
 ### Required
 
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
 - `allowed_entities` (List of String) The list of users who can run an action or notebook. Any user can run if left empty.
-- `allowed_resources_query` (String) The list of resources on which an action or notebook can run. No restriction, if left empty.
+- `allowed_resources_query` (String) The list of resources on which an action or notebook can run. No restriction, if left empty. Defaults to ``.
 - `approvers` (List of String)
-- `cells` (String) The data cells inside a notebook. Defined as a list of JSON objects. These may be either Markdown or Op commands.
+- `cells` (String) The data cells inside a notebook. Defined as a list of JSON objects. These may be either Markdown or Op commands. Defaults to ``.
 - `communication_approval_notifications` (Boolean) Enables slack notifications for approvals operations. (Requires workspace and channel.) Defaults to `true`.
-- `communication_channel` (String) A string value denoting the slack channel where notifications related to the object should be sent to.
+- `communication_channel` (String) A string value denoting the slack channel where notifications related to the object should be sent to. Defaults to ``.
 - `communication_cud_notifications` (Boolean) Enables slack notifications for create/update/delete operations. (Requires workspace and channel.) Defaults to `true`.
 - `communication_execution_notifications` (Boolean) Enables slack notifications for the object executions. (Requires workspace and channel.) Defaults to `true`.
-- `communication_workspace` (String) A string value denoting the slack workspace where notifications related to the object should be sent to.
-- `data` (String, Deprecated) **Deprecated** Field 'data' is obsolete. The JSON representation of a Notebook. If this field is used, then the JSON should only contain these four fields: cells, params, external_params and enabled.
-- `description` (String) A user-friendly explanation of an object.
+- `communication_workspace` (String) A string value denoting the slack workspace where notifications related to the object should be sent to. Defaults to ``.
+- `data` (String, Deprecated) **Deprecated** Field 'data' is obsolete. The JSON representation of a Notebook. If this field is used, then the JSON should only contain these four fields: cells, params, external_params and enabled. Defaults to ``.
+- `description` (String) A user-friendly explanation of an object. Defaults to ``.
 - `editors` (List of String) List of users who can edit the object (with configure permission). Empty maps to all users.
 - `enabled` (Boolean) If the object is currently enabled or disabled. Defaults to `true`.
-- `external_params` (String) Notebook parameters defined via with a JSON path used to extract the parameter's value from an external payload, such as an Alertmanager alert.
-- `filter_resource_to_action` (Boolean) Determines whether parameters containing resources are exported to actions. Defaults to `true`.
+- `external_params` (String) Notebook parameters defined via with a JSON path used to extract the parameter's value from an external payload, such as an Alertmanager alert. Defaults to ``.
+- `filter_resource_to_action` (Boolean) Determines whether parameters containing resources are exported to actions. Defaults to `false`.
 - `is_run_output_persisted` (Boolean) A boolean value denoting whether or not cell outputs should be persisted when running a notebook Defaults to `true`.
 - `labels` (List of String) A list of strings by which notebooks can be grouped.
-- `params` (String) Named variables to pass to an object (e.g. an Action).
-- `resource_query` (String, Deprecated) **Deprecated** Please use 'allowed_resources_query' instead. A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions.
+- `params` (String) Named variables to pass to an object (e.g. an Action). Defaults to ``.
+- `resource_query` (String, Deprecated) **Deprecated** Please use 'allowed_resources_query' instead. A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions. Defaults to ``.
+- `secret_names` (List of String) A list of strings that contains the name of the secrets that are used in the runbook.
 - `timeout_ms` (Number) Defaults to `60000`.
 
 ### Read-Only

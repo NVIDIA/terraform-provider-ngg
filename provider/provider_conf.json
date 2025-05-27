@@ -243,13 +243,6 @@
 				"default": 1,
 				"outtype": "int"
 			},
-			"compile_eligible": {
-				"type": "bool",
-				"optional": true,
-				"step": "compile_eligible",
-				"default": true,
-				"skip": true
-			},
 			"resource_type": {
 				"type": "resource",
 				"optional": true,
@@ -348,14 +341,14 @@
 				"type": "string",
 				"optional": true,
 				"step": "event_type",
-				"alias": "trigger_source",
-				"match_null": "shoreline"
+				"alias_out": "trigger_source",
+				"match_null": "SYSTEM"
 			},
 			"monitor_id": {
 				"type": "string",
 				"optional": true,
 				"step": "monitor_id",
-				"alias": "external_trigger_id"
+				"alias_out": "external_trigger_id"
 			},
 			"alarm_resource_query": {
 				"type": "command",
@@ -366,7 +359,7 @@
 				"optional": true,
 				"preferred_alias": "event_type",
 				"step": "trigger_source",
-				"default": "shoreline"
+				"default": "SYSTEM"
 			},
 			"#external_trigger_id": {
 				"type": "string",
@@ -637,7 +630,7 @@
 			"permissions_user": {
 				"type": "string",
 				"optional": true,
-				"match_null": "Shoreline"
+				"match_null": "NVIDIA"
 			},
 			"api_url": {
 				"type": "string",
@@ -763,6 +756,12 @@
 				"optional": true,
 				"min_ver": "22.0.0",
 				"step": "params_unpack.idp_name"
+			},
+			"api_certificate": {
+				"type": "string",
+				"optional": true,
+				"min_ver": "28.1.0",
+				"step": "params_unpack.api_certificate"
 			}
 		}
 	},
@@ -1000,9 +999,15 @@
 			},
 			"filter_resource_to_action": {
 				"type": "bool",
-				"default": true,
+				"default": false,
 				"optional": true,
-				"min_ver": "27.2.0"
+				"min_ver": "28.0.0",
+				"force_update": true
+			},
+			"secret_names": {
+				"type": "string_set",
+				"optional": true,
+				"min_ver": "28.1.0"
 			}
 		}
 	},
@@ -1199,7 +1204,7 @@
 				"type": "string",
 				"optional": true,
 				"min_ver": "19.1.0",
-				"default": "Shoreline"
+				"default": "NVIDIA"
 			},
 			"external_audit_storage_enabled": {
 				"type": "bool",
@@ -1270,6 +1275,12 @@
 				"type": "string_set",
 				"optional": true,
 				"min_ver": "27.2.0"
+			},
+			"managed_secrets": {
+				"type": "string",
+				"optional": true,
+				"min_ver": "28.1.0",
+				"default": "LOCAL"
 			}
 		}
 	},
@@ -1356,17 +1367,17 @@
 			"bot": "An automation that ties an Action to an Alert.",
 			"circuit_breaker": "An automatic rate limit on actions.",
 			"file": "A datafile that is automatically copied/distributed to defined Resources.",
-			"integration": "A third-party integration (e.g. DataDog, NewRelic, etc) .",
+			"integration": "A third-party integration (e.g. DataDog, NewRelic, etc).",
 			"metric": "A periodic measurement of a system property.",
-			"notebook": "An interactive notebook of Op commands and user documentation .",
-			"principal": "An authorization group (e.g. Okta groups). Note: Admin privilege (in Shoreline) to create principal objects.",
+			"notebook": "An interactive notebook of Op commands and user documentation.",
+			"principal": "An authorization group (e.g. Okta groups). Note: Admin privilege (in NVIDIA Mission Control autonomous hardware recovery) to create principal objects.",
 			"resource": "A server or compute resource in the system (e.g. host, pod, container).",
 			"system_settings": "System-level settings. Note: there must only be one instance of this terraform resource named 'system_settings'.",
-			"report_template": "A resource report template. Note: Configure privilege (in Shoreline) to create report template objects.",
+			"report_template": "A resource report template. Note: Configure privilege (in NVIDIA Mission Control autonomous hardware recovery) to create report template objects.",
 			"dashboard": "A platform for visualizing resources and their associated tags."
 		},
 		"attributes": {
-			"name": "The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).",
+			"name": "The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).",
 			"type": "The type of object (i.e., Alarm, Action, Bot, Metric, Resource, or File).",
 			"action_limit": "The number of simultaneous actions allowed for a permissions group.",
 			"administer_permission": "If a permissions group is allowed to perform \"administer\" actions.",
@@ -1377,7 +1388,6 @@
 			"checksum": "Cryptographic hash (e.g. md5) of a File Resource.",
 			"clear_query": "The Alarm's resolution condition.",
 			"command": "A specific action to run.",
-			"compile_eligible": "If the Alarm can be effectively optimized.",
 			"complete_long_template": "The long description of the Action's completion.",
 			"complete_short_template": "The short description of the Action's completion.",
 			"complete_title_template": "UI title of the Action's completion.",
@@ -1392,7 +1402,7 @@
 			"error_long_template": "The long description of the Action's error condition.",
 			"error_short_template": "The short description of the Action's error condition.",
 			"error_title_template": "UI title of the Action's error condition.",
-			"event_type": "Used to tag external triggers vs 'shoreline' alarms (default).",
+			"event_type": "Used to tag external triggers vs 'SYSTEM' alarms (default).",
 			"execute_limit": "The number of simultaneous linux (shell) commands allowed for a permissions group.",
 			"family": "General class for an Action or Bot (e.g., custom, standard, metric, or system check).",
 			"file_data": "Internal representation of a distributed File object's data (computed).",
@@ -1442,7 +1452,7 @@
 			"app_key": "Application key for a 3rd-party service integration.",
 			"insights_collector_url": "Insights url for a 3rd-party service integration.",
 			"insights_collector_api_key": "Insights key for a 3rd-party service integration.",
-			"permissions_user": "The user which 3rd-party service integration remediations run as (default 'Shoreline').",
+			"permissions_user": "The user which 3rd-party service integration remediations run as (default 'NVIDIA').",
 			"dashboard_name": "The name of a dashboard for 3rd-party service integration (datadog).",
 			"webhook_name": "The name of a webhook for 3rd-party service integration (datadog).",
 			"cache_ttl": "The amount of time group memberships will be cached (in milliseconds).",
@@ -1471,7 +1481,8 @@
 			"maintenance_mode_enabled": "System setting that when enabled, rejects new runs, allowing ongoing tasks to complete before stopping.",
 			"allowed_tags": "Defines a list of tags that are allowed on agent tag ingestion",
 			"skipped_tags": "Defines a list of tags that are skipped on agent tag ingestion",
-			"integration_name": "The name/symbol of a Shoreline integration involved in triggering the bot.",
+			"managed_secrets": "System setting that discriminates between usage of external vaults and the built in one.",
+			"integration_name": "The name/symbol of a NVIDIA Mission Control autonomous hardware recovery integration involved in triggering the bot.",
 			"editors": "List of users who can edit the object (with configure permission). Empty maps to all users.",
 			"communication_cud_notifications": "Enables slack notifications for create/update/delete operations. (Requires workspace and channel.)",
 			"communication_approval_notifications": "Enables slack notifications for approvals operations. (Requires workspace and channel.)",
@@ -1487,9 +1498,11 @@
 			"blocks": "The JSON encoded blocks of the report template.",
 			"links": "The JSON encoded links of a report template with other report templates.",
 			"dashboard_type": "Specifies the type of the dashboard configuration. Currently, only 'TAGS_SEQUENCE' is supported.",
+			"secret_names": "A list of strings that contains the name of the secrets that are used in the runbook.",
 			"groups": "A JSON-encoded list of groups in the dashboard configuration. Each group is an object with 'name' (the group's name) and 'tags' (a list of tag names belonging to the group).",
 			"values": "A JSON-encoded list of objects defining the values and their associated colors in the dashboard configuration. Each object contains: 'color' (the color associated with the values) and 'values' (a list of values corresponding to specific tags).",
-			"other_tags": "A list of additional tags that will be displayed for the resources."
+			"other_tags": "A list of additional tags that will be displayed for the resources.",
+			"api_certificate": "API certificate for a 3rd-party service integration."
 		}
 	}
 }

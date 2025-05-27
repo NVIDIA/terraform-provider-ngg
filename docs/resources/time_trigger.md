@@ -18,13 +18,13 @@ NVIDIA Mission Control autonomous hardware recovery time_trigger. A condition th
 ### Required
 
 - `fire_query` (String) The trigger condition for an Alarm (general expression) or the TimeTrigger (e.g. 'every 5m').
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
 - `enabled` (Boolean) If the object is currently enabled or disabled. Defaults to `false`.
-- `end_date` (String) When the trigger condition stops firing. (defaults to unset, e.g. no stop date). The accepted format is ISO8601, e.g. '2029-02-17T08:08:01'.
-- `start_date` (String) When the trigger condition starts firing (defaults to creation/update time of the trigger). The accepted format is ISO8601, e.g. '2024-02-17T08:08:01'.
+- `end_date` (String) When the trigger condition stops firing. (defaults to unset, e.g. no stop date). The accepted format is ISO8601, e.g. '2029-02-17T08:08:01'. Defaults to ``.
+- `start_date` (String) When the trigger condition starts firing (defaults to creation/update time of the trigger). The accepted format is ISO8601, e.g. '2024-02-17T08:08:01'. Defaults to ``.
 
 ### Read-Only
 

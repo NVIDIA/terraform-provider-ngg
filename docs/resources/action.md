@@ -138,32 +138,32 @@ resource "mcahr_action" "jvm_trace_check_heap" {
 ### Required
 
 - `command` (String) A specific action to run.
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
 - `allowed_entities` (List of String) The list of users who can run an action or notebook. Any user can run if left empty.
-- `allowed_resources_query` (String) The list of resources on which an action or notebook can run. No restriction, if left empty.
-- `communication_channel` (String) A string value denoting the slack channel where notifications related to the object should be sent to.
-- `communication_workspace` (String) A string value denoting the slack workspace where notifications related to the object should be sent to.
-- `complete_long_template` (String) The long description of the Action's completion.
-- `complete_short_template` (String) The short description of the Action's completion.
-- `complete_title_template` (String) UI title of the Action's completion.
-- `description` (String) A user-friendly explanation of an object.
+- `allowed_resources_query` (String) The list of resources on which an action or notebook can run. No restriction, if left empty. Defaults to ``.
+- `communication_channel` (String) A string value denoting the slack channel where notifications related to the object should be sent to. Defaults to ``.
+- `communication_workspace` (String) A string value denoting the slack workspace where notifications related to the object should be sent to. Defaults to ``.
+- `complete_long_template` (String) The long description of the Action's completion. Defaults to ``.
+- `complete_short_template` (String) The short description of the Action's completion. Defaults to ``.
+- `complete_title_template` (String) UI title of the Action's completion. Defaults to ``.
+- `description` (String) A user-friendly explanation of an object. Defaults to ``.
 - `editors` (List of String) List of users who can edit the object (with configure permission). Empty maps to all users.
 - `enabled` (Boolean) If the object is currently enabled or disabled. Defaults to `false`.
-- `error_long_template` (String) The long description of the Action's error condition.
-- `error_short_template` (String) The short description of the Action's error condition.
-- `error_title_template` (String) UI title of the Action's error condition.
+- `error_long_template` (String) The long description of the Action's error condition. Defaults to ``.
+- `error_short_template` (String) The short description of the Action's error condition. Defaults to ``.
+- `error_title_template` (String) UI title of the Action's error condition. Defaults to ``.
 - `file_deps` (List of String) file object dependencies.
 - `params` (List of String) Named variables to pass to an object (e.g. an Action).
-- `res_env_var` (String) Result environment variable ... an environment variable used to output values through.
-- `resource_query` (String) A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions.
+- `res_env_var` (String) Result environment variable ... an environment variable used to output values through. Defaults to ``.
+- `resource_query` (String) A set of Resources (e.g. host, pod, container), optionally filtered on tags or dynamic conditions. Defaults to ``.
 - `resource_tags_to_export` (List of String)
-- `shell` (String) The commandline shell to use (e.g. /bin/sh).
-- `start_long_template` (String) The long description when starting the Action.
-- `start_short_template` (String) The short description when starting the Action.
-- `start_title_template` (String) UI title of the start of the Action.
+- `shell` (String) The commandline shell to use (e.g. /bin/sh). Defaults to ``.
+- `start_long_template` (String) The long description when starting the Action. Defaults to ``.
+- `start_short_template` (String) The short description when starting the Action. Defaults to ``.
+- `start_title_template` (String) UI title of the start of the Action. Defaults to ``.
 - `timeout` (Number) Maximum time to wait, in milliseconds. Defaults to `60000`.
 
 ### Read-Only

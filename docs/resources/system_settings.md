@@ -17,7 +17,7 @@ NVIDIA Mission Control autonomous hardware recovery system_settings. System-leve
 
 ### Required
 
-- `name` (String) The name/symbol for the object within Shoreline and the op language (must be unique, only alphanumeric/underscore).
+- `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
 
 ### Optional
 
@@ -36,6 +36,7 @@ NVIDIA Mission Control autonomous hardware recovery system_settings. System-leve
 - `external_audit_storage_enabled` (Boolean) System setting controlling if audit information is stored in an alternate location. Defaults to `false`.
 - `external_audit_storage_type` (String) System setting for alternate audit storage type (e.g. 'ELASTIC'). Defaults to `ELASTIC`.
 - `maintenance_mode_enabled` (Boolean) System setting that when enabled, rejects new runs, allowing ongoing tasks to complete before stopping. Defaults to `false`.
+- `managed_secrets` (String) System setting that discriminates between usage of external vaults and the built in one. Defaults to `LOCAL`.
 - `notebook_ad_hoc_approval_request_enabled` (Boolean, Deprecated) **Deprecated** Please use 'runbook_ad_hoc_approval_request_enabled' instead. System setting controlling if approvals are enabled for ad-hoc notebook execution. Defaults to `true`.
 - `notebook_approval_request_expiry_time` (Number, Deprecated) **Deprecated** Please use 'runbook_approval_request_expiry_time' instead. System setting for maximum wait for approval after request (in minutes). Defaults to `60`.
 - `notebook_run_approval_expiry_time` (Number, Deprecated) **Deprecated** Please use 'run_approval_expiry_time' instead. System setting for maximum wait for execution after approval (in minutes). Defaults to `60`.
@@ -46,7 +47,7 @@ NVIDIA Mission Control autonomous hardware recovery system_settings. System-leve
 - `runbook_ad_hoc_approval_request_enabled` (Boolean) Defaults to `true`.
 - `runbook_approval_request_expiry_time` (Number) Defaults to `60`.
 - `skipped_tags` (List of String) Defines a list of tags that are skipped on agent tag ingestion
-- `time_trigger_permissions_user` (String) System setting for the user that time-triggered notebooks run as. Defaults to `Shoreline`.
+- `time_trigger_permissions_user` (String) System setting for the user that time-triggered notebooks run as. Defaults to `NVIDIA`.
 
 ### Read-Only
 
