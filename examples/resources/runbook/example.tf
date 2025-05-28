@@ -91,7 +91,7 @@ resource "mcahr_runbook" "full_runbook" {
   communication_execution_notifications = true
   filter_resource_to_action             = true
   enabled                               = true
-  secret_names                          = ["<secret_name_1>", "<secret_name_2>"]
+  secret_names                          = ["secret_1", "secret_2"]
 }
 
 

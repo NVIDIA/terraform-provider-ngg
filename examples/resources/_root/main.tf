@@ -46,7 +46,6 @@ module "principal" {
   source = "../principal"
 }
 
-
 module "resource" {
   source = "../resource"
 }
