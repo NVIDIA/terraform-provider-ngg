@@ -1,0 +1,33 @@
+name: CI main
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  terraform-test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.23.4'
+      - name: Scan for keys
+        run: make scan
+      - name: Unit tests
+        run: make test
+      - name: Build releases
+        run: make release
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.MCAHR_BUILD_AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.MCAHR_BUILD_AWS_SEC }}
+          aws-region: us-west-2
+      - name: upload to s3
+        id: upload_to_s3
+        run: |
+          version=$(cat Makefile| grep "VERSION=" | awk -F "=" '{print $2}')
+          echo "uploading version:${version} files to s3"
+          aws s3 cp ./bin/ s3://mcahr-terraform-provider/${version}/ --recursive
+          echo "::set-output name=version::$version"
