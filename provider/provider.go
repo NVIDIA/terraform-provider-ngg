@@ -26,11 +26,11 @@ import (
 var ObjectConfigJsonStr string
 
 var (
-	RenderedProviderName string = os.Getenv("RENDERED_PROVIDER_NAME")
-	ProviderShortName    string = os.Getenv("PROVIDER_SHORT_NAME")
-	EnvVarsNamePrefix    string = os.Getenv("ENV_VARS_NAME_PREFIX")
-	TfLogFile            string = os.Getenv("TF_LOG_FILE")
-	DefaultUserName      string = os.Getenv("DEFAULT_USER_NAME")
+	RenderedProviderName string // Will be set at build time
+	ProviderShortName    string // Will be set at build time
+	EnvVarsNamePrefix    string // Will be set at build time
+	TfLogFile            string // Will be set at build time
+	DefaultUserName      string // Will be set at build time
 )
 
 func StringToJsonArray(data string) ([]interface{}, error) {
@@ -145,7 +145,11 @@ func timeSuffixToIntSec(tv string) int {
 }
 
 func appendActionLogInner(msg string) {
-	f, err := os.OpenFile(TfLogFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	logFile := TfLogFile
+	if logFile == "" {
+		logFile = "/tmp/tf_provider.log" // fallback only for logging
+	}
+	f, err := os.OpenFile(logFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		//panic(err)
 		return
@@ -349,6 +353,23 @@ func ConvertBoolInt(val interface{}) int {
 }
 
 func init() {
+	// Read from environment variables first, otherwise use build-time values from -X flags
+	if envName := os.Getenv("RENDERED_PROVIDER_NAME"); envName != "" {
+		RenderedProviderName = envName
+	}
+	if envShort := os.Getenv("PROVIDER_SHORT_NAME"); envShort != "" {
+		ProviderShortName = envShort
+	}
+	if envPrefix := os.Getenv("ENV_VARS_NAME_PREFIX"); envPrefix != "" {
+		EnvVarsNamePrefix = envPrefix
+	}
+	if envLogFile := os.Getenv("TF_LOG_FILE"); envLogFile != "" {
+		TfLogFile = envLogFile
+	}
+	if envUser := os.Getenv("DEFAULT_USER_NAME"); envUser != "" {
+		DefaultUserName = envUser
+	}
+
 	// Set descriptions to support markdown syntax, this will be used in document generation
 	// and the language server.
 	schema.DescriptionKind = schema.StringMarkdown

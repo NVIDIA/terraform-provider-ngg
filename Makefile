@@ -11,7 +11,7 @@ REPODIR=/tmp/tf-repo/providers
 BINARY=terraform-provider-mcahr
 VERSION=1.15.39
 
-BUILD_ENV_VARS=-ldflags "-X 'main.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'main.ProviderShortName=\"mcahr\"' -X 'provider.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'provider.ProviderShortName=\"mcahr\"' -X 'provider.EnvVarsNamePrefix=\"MCAHR\"' -X 'provider.TfLogFile=\"/tmp/tf_provider.log\"' -X 'provider.DefaultUserName=\"NVIDIA\"'"
+BUILD_ENV_VARS=-ldflags " -X 'main.ProviderPath=registry.opentofu.org/NVIDIA/mcahr' -X 'terraform/terraform-provider/provider.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'terraform/terraform-provider/provider.ProviderShortName=mcahr' -X 'terraform/terraform-provider/provider.EnvVarsNamePrefix=MCAHR' -X 'terraform/terraform-provider/provider.TfLogFile=/tmp/tf_provider.log' -X 'terraform/terraform-provider/provider.DefaultUserName=NVIDIA'"
 
 
 // NOTE: this only works for 64 bit linux and MacOs ("darwin")
