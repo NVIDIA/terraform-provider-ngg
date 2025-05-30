@@ -20,17 +20,17 @@ import (
 )
 
 // The endpoint path to execute command.
-const executeEndpoint = "/v1/execute"
-const authEndpoint = "/v1/token/refresh?flow_type=cli"
+const executeEndpoint = "/api/v1/execute"
+const authEndpoint = "/api/v1/token/refresh?flow_type=cli"
 const requestTimeoutSec = 90
 const accessTokenTTL = 60 * 60 // one hour expiration for CLI access tokens
 
 func GetTokenAuthUrl(GlobalOpts *CliOpts, manual bool) string {
 	// NOTE: there should be no trailing "/" on GlobalOpts.Url
 	if manual {
-		return GlobalOpts.Url + "/v2/saml/auth_redirect?type=saml&mode=copy_paste"
+		return GlobalOpts.Url + "/sso/v2/saml/auth_redirect?type=saml&mode=copy_paste"
 	} else {
-		return GlobalOpts.Url + "/v2/saml/auth_redirect?type=saml&mode=download"
+		return GlobalOpts.Url + "/sso/v2/saml/auth_redirect?type=saml&mode=download"
 	}
 }
 
