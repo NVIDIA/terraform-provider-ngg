@@ -118,6 +118,13 @@ jobs:
           GNUPGHOME: ${{ env.GNUPGHOME }}
           # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Provider-specific build variables
+          PROVIDER_PATH: "registry.opentofu.org/NVIDIA/mcahr"
+          RENDERED_PROVIDER_NAME: "NVIDIA Mission Control autonomous hardware recovery"
+          PROVIDER_SHORT_NAME: "mcahr"
+          ENV_VARS_NAME_PREFIX: "MCAHR"
+          TF_LOG_FILE: "/tmp/tf_provider.log"
+          DEFAULT_USER_NAME: "NVIDIA"
       -
         name: Clean up GPG
         # Always run this step, even if goreleaser fails
