@@ -17,7 +17,16 @@ builds:
   flags:
     - -trimpath
   ldflags:
-    - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.ProviderPath={{ .Env.PROVIDER_PATH }} -X terraform/terraform-provider/provider.RenderedProviderName="{{ .Env.RENDERED_PROVIDER_NAME }}" -X terraform/terraform-provider/provider.ProviderShortName={{ .Env.PROVIDER_SHORT_NAME }} -X terraform/terraform-provider/provider.EnvVarsNamePrefix={{ .Env.ENV_VARS_NAME_PREFIX }} -X terraform/terraform-provider/provider.TfLogFile={{ .Env.TF_LOG_FILE }} -X terraform/terraform-provider/provider.DefaultUserName={{ .Env.DEFAULT_USER_NAME }}'
+    - -s
+    - -w
+    - -X 'main.version={{.Version}}'
+    - -X 'main.commit={{.Commit}}'
+    - -X 'main.ProviderPath={{.Env.PROVIDER_PATH}}'
+    - -X 'terraform/terraform-provider/provider.RenderedProviderName=\"{{.Env.RENDERED_PROVIDER_NAME}}\"'
+    - -X 'terraform/terraform-provider/provider.ProviderShortName={{.Env.PROVIDER_SHORT_NAME}}'
+    - -X 'terraform/terraform-provider/provider.EnvVarsNamePrefix={{.Env.ENV_VARS_NAME_PREFIX}}'
+    - -X 'terraform/terraform-provider/provider.TfLogFile={{.Env.TF_LOG_FILE}}'
+    - -X 'terraform/terraform-provider/provider.DefaultUserName={{.Env.DEFAULT_USER_NAME}}'
   goos:
     - freebsd
     - windows
