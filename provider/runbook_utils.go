@@ -158,12 +158,14 @@ func buildParametersData(params interface{}, exists bool) ([]interface{}, error)
 		required := CastToBool(GetNestedValueOrDefault(parameter, ToKeyPath("required"), true))
 		value := CastToString(GetNestedValueOrDefault(parameter, ToKeyPath("value"), ""))
 		export := CastToBool(GetNestedValueOrDefault(parameter, ToKeyPath("export"), false))
+		description := CastToString(GetNestedValueOrDefault(parameter, ToKeyPath("description"), ""))
 
 		parameterData := map[string]interface{}{
-			"export":   export, // false by default
-			"name":     name,
-			"required": required, // true by default
-			"value":    value,    // empty string by default
+			"export":      export, // false by default
+			"name":        name,
+			"required":    required,    // true by default
+			"value":       value,       // empty string by default
+			"description": description, // empty string by default
 		}
 
 		paramsOut = append(paramsOut, parameterData)
@@ -205,12 +207,23 @@ func buildExternalParametersData(d *schema.ResourceData) ([]interface{}, error) 
 		if !exists {
 			jsonPath = ""
 		}
+		export, exists := externalParameter.(map[string]interface{})["export"]
+		if !exists {
+			export = false
+		}
+
+		description, exists := externalParameter.(map[string]interface{})["description"]
+		if !exists {
+			description = ""
+		}
 
 		externalParameterData := map[string]interface{}{
-			"name":      name,
-			"source":    source,
-			"value":     value,
-			"json_path": jsonPath,
+			"name":        name,
+			"source":      source,
+			"value":       value,
+			"json_path":   jsonPath,
+			"export":      export,
+			"description": description,
 		}
 
 		externalParametersData = append(externalParametersData, externalParameterData)

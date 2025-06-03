@@ -91,6 +91,11 @@ resource "mcahr_runbook" "full_runbook" {
     {
       "name" : "param_4",
       "required" : false
+    },
+    {
+      "name" : "param_5",
+      "required" : false,
+      "description" : "Param #5 description"
     }
   ])
   external_params = jsonencode([
@@ -117,6 +122,12 @@ resource "mcahr_runbook" "full_runbook" {
       "name" : "external_param_4",
       "source" : "alertmanager",
       "json_path" : "$.<path>"
+    },
+    {
+      "name" : "external_param_5",
+      "source" : "alertmanager",
+      "json_path" : "$.<path>",
+      "description" : "External parameter #5 description"
     }
   ])
   name                                  = "full_runbook"

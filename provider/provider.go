@@ -1092,6 +1092,15 @@ func AddNotebookParamsFields(params []interface{}) {
 					theMap["value"] = CastToString(val)
 				}
 			}
+			description, hasDescription := theMap["description"]
+			if !hasDescription {
+				theMap["description"] = ""
+			} else {
+				_, isStr := description.(string)
+				if !isStr {
+					theMap["description"] = CastToString(description)
+				}
+			}
 		}
 	}
 }
@@ -1103,6 +1112,21 @@ func AddNotebookExternalParamsFields(externalParams []interface{}) {
 			_, hasValue := theMap["value"]
 			if !hasValue {
 				theMap["value"] = ""
+			}
+
+			_, hasExport := theMap["export"]
+			if !hasExport {
+				theMap["export"] = false
+			}
+
+			description, hasDescription := theMap["description"]
+			if !hasDescription {
+				theMap["description"] = ""
+			} else {
+				_, isStr := description.(string)
+				if !isStr {
+					theMap["description"] = CastToString(description)
+				}
 			}
 		}
 	}
