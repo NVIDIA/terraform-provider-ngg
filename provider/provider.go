@@ -1251,6 +1251,17 @@ func NormalizeNotebookCells(cells *[]interface{}) {
 }
 
 func IsSecretAwareSupported(backendVersion VersionRecord) bool {
+	if !backendVersion.Valid {
+		var build struct {
+			Tag string `json:"tag"`
+		}
+		if err := json.Unmarshal([]byte(backendVersion.Build), &build); err == nil {
+			return strings.HasPrefix(build.Tag, "private-") ||
+				strings.HasPrefix(build.Tag, "arm-private-") ||
+				strings.HasPrefix(build.Tag, "master-")
+		}
+	}
+
 	if backendVersion.Major > 28 {
 		return true
 	}
