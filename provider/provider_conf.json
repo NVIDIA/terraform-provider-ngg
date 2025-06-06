@@ -715,6 +715,12 @@
 				"min_ver": "17.0.0",
 				"step": "params_unpack.external_url"
 			},
+			"payload_paths": { 
+				"type": "string_set", 
+				"optional": true, 
+				"min_ver": "28.4.0", 
+				"step": "params_unpack.payload_paths" 
+			},
 			"cache_ttl_ms": {
 				"type": "int",
 				"optional": true,
@@ -1502,7 +1508,8 @@
 			"groups": "A JSON-encoded list of groups in the dashboard configuration. Each group is an object with 'name' (the group's name) and 'tags' (a list of tag names belonging to the group).",
 			"values": "A JSON-encoded list of objects defining the values and their associated colors in the dashboard configuration. Each object contains: 'color' (the color associated with the values) and 'values' (a list of values corresponding to specific tags).",
 			"other_tags": "A list of additional tags that will be displayed for the resources.",
-			"api_certificate": "API certificate for a 3rd-party service integration."
+			"api_certificate": "API certificate for a 3rd-party service integration.",
+			"payload_paths": "A list of JSON paths to extract values from the payload of an alert."
 		}
 	}
 }

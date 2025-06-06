@@ -2062,7 +2062,9 @@ func ResourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef
 		if aliasKey != "" {
 			aliasKeyVal = d.Get(aliasKey).(string)
 			aliasMap = GetNestedValueOrDefault(objectDef, ToKeyPath("internal.alias.map."+aliasKeyVal), map[string]interface{}{}).(map[string]interface{})
-			attrsOrAlias = aliasMap
+			if aliasMap != nil && aliasKeyVal != "alertmanager" {
+				attrsOrAlias = aliasMap
+			}
 		}
 
 		changed, diags := setFieldInner(key, val, name, typ, attrsOrAlias, ctx, d, meta, doDiff, isCreate, forcedChangeKeys, forcedChangeVals)

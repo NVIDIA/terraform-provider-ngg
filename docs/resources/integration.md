@@ -40,6 +40,7 @@ NVIDIA Mission Control autonomous hardware recovery integration. A third-party i
 - `idp_name` (String) The Identity Provider's name. Defaults to ``.
 - `insights_collector_api_key` (String) Insights key for a 3rd-party service integration. Defaults to ``.
 - `insights_collector_url` (String) Insights url for a 3rd-party service integration. Defaults to ``.
+- `payload_paths` (List of String) A list of JSON paths to extract values from the payload of an alert.
 - `permissions_user` (String) The user which 3rd-party service integration remediations run as (default 'NVIDIA'). Defaults to ``.
 - `site_url` (String) Site/Application url for a 3rd-party service integration. Defaults to ``.
 - `subject` (String) The subject whose authentication details is used for a 3rd-party service integration (google cloud identity). Defaults to ``.
