@@ -233,6 +233,7 @@ func (client *Client) callApi(suppressErrors bool, auth string, url string, body
 	req.Header.Set("content-type", "application/json; charset=utf-8")
 	req.Header.Set("idempotency-key", client.authData.ApiKey)
 	req.Header.Set("accept", "*/*")
+	req.Header.Set("User-Agent", "terraform")
 
 	// Allow Ctrl-C to cancel
 	canceled := false
