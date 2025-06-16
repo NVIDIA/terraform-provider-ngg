@@ -768,6 +768,30 @@
 				"optional": true,
 				"min_ver": "28.1.0",
 				"step": "params_unpack.api_certificate"
+			},
+			"address": { 
+				"type": "string", 
+				"optional": true, 
+				"min_ver": "29.0.0", 
+				"step": "params_unpack.address" 
+			},
+			"namespace": { 
+				"type": "string", 
+				"optional": true, 
+				"min_ver": "29.0.0", 
+				"step": "params_unpack.namespace" 
+			},  
+			"role_name": { 
+				"type": "string", 
+				"optional": true, 
+				"min_ver": "29.0.0", 
+				"step": "params_unpack.role_name" 
+			},
+			"jwt_auth_path": { 
+				"type": "string", 
+				"optional": true, 
+				"min_ver": "29.0.0", 
+				"step": "params_unpack.jwt_auth_path" 
 			}
 		}
 	},
@@ -1365,6 +1389,36 @@
 			}
 		}
 	},
+	"nvault_secret": {
+		"attributes": {
+			"type": {
+				"type": "string",
+				"computed": true,
+				"value": "NVAULT_SECRET"
+			},
+			"name": {
+				"type": "label",
+				"required": true,
+				"forcenew": true,
+				"skip": true
+			},
+			"vault_secret_path": {
+				"type": "string",
+				"required": true,
+				"step": "secret_info.vault_secret_path"
+			},
+			"vault_secret_key": {
+				"type": "string",
+				"required": true,
+				"step": "secret_info.vault_secret_key"
+			},
+			"integration_name": {
+				"type": "string",
+				"required": true,
+				"step": "secret_info.integration_name"
+			}
+		}
+	},
 	"docs": {
 		"objects": {
 			"action": "A command that can be run.",
@@ -1380,7 +1434,8 @@
 			"resource": "A server or compute resource in the system (e.g. host, pod, container).",
 			"system_settings": "System-level settings. Note: there must only be one instance of this terraform resource named 'system_settings'.",
 			"report_template": "A resource report template. Note: Configure privilege (in NVIDIA Mission Control autonomous hardware recovery) to create report template objects.",
-			"dashboard": "A platform for visualizing resources and their associated tags."
+			"dashboard": "A platform for visualizing resources and their associated tags.",
+			"nvault_secret": "A secret managed by NVault. Creating it requires an active NVault integration to be configured and enabled."
 		},
 		"attributes": {
 			"name": "The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).",
@@ -1488,7 +1543,7 @@
 			"allowed_tags": "Defines a list of tags that are allowed on agent tag ingestion",
 			"skipped_tags": "Defines a list of tags that are skipped on agent tag ingestion",
 			"managed_secrets": "System setting that discriminates between usage of external vaults and the built in one.",
-			"integration_name": "The name/symbol of a NVIDIA Mission Control autonomous hardware recovery integration involved in triggering the bot.",
+			"integration_name": "The name/symbol of a NVIDIA Mission Control autonomous hardware recovery integration.",
 			"editors": "List of users who can edit the object (with configure permission). Empty maps to all users.",
 			"communication_cud_notifications": "Enables slack notifications for create/update/delete operations. (Requires workspace and channel.)",
 			"communication_approval_notifications": "Enables slack notifications for approvals operations. (Requires workspace and channel.)",
@@ -1509,7 +1564,13 @@
 			"values": "A JSON-encoded list of objects defining the values and their associated colors in the dashboard configuration. Each object contains: 'color' (the color associated with the values) and 'values' (a list of values corresponding to specific tags).",
 			"other_tags": "A list of additional tags that will be displayed for the resources.",
 			"api_certificate": "API certificate for a 3rd-party service integration.",
-			"payload_paths": "A list of JSON paths to extract values from the payload of an alert."
+			"payload_paths": "A list of JSON paths to extract values from the payload of an alert.",
+			"address": "The URL of the Vault server.",
+			"namespace": "A logical namespace in Vault used to organize and isolate secrets and policies.",
+			"jwt_auth_path": "The path to the JWT authentication method in Vault. It tells NVault where to perform JWT login requests.",
+			"role_name": "The name of the Vault role configured under the JWT auth method. It determines policies and constraints for the login.",
+			"vault_secret_path": "The full path in Vault where the secret is stored. It includes the mount path and the subpath. It tells Vault where to look for the secret.",
+			"vault_secret_key": "The specific key within the secret data to retrieve."
 		}
 	}
 }

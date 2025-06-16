@@ -9,7 +9,7 @@ default: install
 REPODIR=/tmp/tf-repo/providers
 
 BINARY=terraform-provider-mcahr
-VERSION=1.15.48
+VERSION=1.15.49
 
 # IMPORTANT: When changing these build env vars, make sure to update the github release workflows files as well (the goreleaser env vars)
 BUILD_ENV_VARS=-ldflags " -X 'main.ProviderPath=registry.opentofu.org/NVIDIA/mcahr' -X 'terraform/terraform-provider/provider.RenderedProviderName=\"NVIDIA Mission Control autonomous hardware recovery\"' -X 'terraform/terraform-provider/provider.ProviderShortName=mcahr' -X 'terraform/terraform-provider/provider.EnvVarsNamePrefix=MCAHR' -X 'terraform/terraform-provider/provider.TfLogFile=/tmp/tf_provider.log' -X 'terraform/terraform-provider/provider.DefaultUserName=NVIDIA'"
