@@ -634,7 +634,6 @@ func TestAccResourcePrincipal(t *testing.T) {
 					// resource.TestCheckResourceAttr(ProviderShortName + "_principal."+pre+"_principal", "idp_name", "azure"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "action_limit", "100"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "execute_limit", "50"),
-					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "view_limit", "200"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "administer_permission", "false"),
 					resource.TestCheckResourceAttr(ProviderShortName+"_principal."+pre+"_principal", "configure_permission", "false"),
 				),
@@ -654,7 +653,6 @@ func buildMockAccResourcePrincipal(prefix string, full bool) string {
 			idp_name              = "azure"
 			action_limit          = 100
 			execute_limit         = 50
-			view_limit            = 200
 			administer_permission = false
 			configure_permission  = false
 `

@@ -27,7 +27,7 @@ NVIDIA Mission Control autonomous hardware recovery principal. An authorization 
 - `configure_permission` (Boolean) If a permissions group is allowed to perform "configure" actions. Defaults to `false`.
 - `execute_limit` (Number) The number of simultaneous linux (shell) commands allowed for a permissions group. Defaults to `0`.
 - `idp_name` (String) The Identity Provider's name. Defaults to ``.
-- `view_limit` (Number) The number of simultaneous metrics allowed for a permissions group. Defaults to `0`.
+- `view_limit` (Number, Deprecated) **Deprecated** Field 'view_limit' is obsolete. The number of simultaneous metrics allowed for a permissions group. Defaults to `0`.
 
 ### Read-Only
 

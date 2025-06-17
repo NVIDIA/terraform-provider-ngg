@@ -5,7 +5,6 @@ resource "mcahr_principal" "full_principal" {
   idp_name              = "azure"
   action_limit          = 100
   execute_limit         = 50
-  view_limit            = 200
   administer_permission = false
   configure_permission  = false
 }
