@@ -3,6 +3,10 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   terraform-test-and-build:
     runs-on: ubuntu-latest
