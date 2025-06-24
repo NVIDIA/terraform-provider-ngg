@@ -9,6 +9,8 @@
 # in `goreleaser` to indicate this is being used in a non-interactive mode.
 #
 name: release
+permissions:
+  contents: read
 on:
   push:
     tags:
