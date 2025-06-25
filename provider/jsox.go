@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"os"
 	"reflect"
 	"sort"
@@ -138,7 +139,11 @@ func ParseIndexSpec(spec string) int {
 	if len(subStr) == 0 {
 		return -2
 	}
-	return int(CastToInt(subStr))
+	parsed := CastToInt(subStr)
+	if parsed < math.MinInt || parsed > math.MaxInt {
+		return -1 // Out of bounds for int
+	}
+	return int(parsed)
 }
 
 // Returns the object at js[path[0]][path[1]][...],true if it exists or nil,false
