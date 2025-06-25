@@ -2584,7 +2584,8 @@ func ResourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 			if replaces != "" {
 				_, replacesSet := d.GetOk(replaces)
 				if replacesSet {
-					appendActionLog(fmt.Sprintf("Reading deprecated/renamed skipping new (for obsolete) field : %s: '%s'.'%s'->'%s'  '%v'\n", typ, name, key, replaces, val))
+					safeVal := strings.ReplaceAll(fmt.Sprintf("%v", val), "'", "\\'")
+					appendActionLog(fmt.Sprintf("Reading deprecated/renamed skipping new (for obsolete) field : %s: '%s'.'%s'->'%s'  '%v'\n", typ, name, key, replaces, safeVal))
 					continue
 				}
 			}
