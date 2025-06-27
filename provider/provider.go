@@ -2061,19 +2061,28 @@ func ResourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef
 			continue
 		}
 
-		attrsOrAlias := attrs
+		attrsMergedWithAlias := attrs
 		aliasKey, _ := GetNestedValueOrDefault(objectDef, ToKeyPath("internal.alias.key"), "").(string)
 		aliasKeyVal := ""
 		aliasMap := map[string]interface{}{}
 		if aliasKey != "" {
 			aliasKeyVal = d.Get(aliasKey).(string)
 			aliasMap = GetNestedValueOrDefault(objectDef, ToKeyPath("internal.alias.map."+aliasKeyVal), map[string]interface{}{}).(map[string]interface{})
-			if aliasMap != nil && aliasKeyVal != "alertmanager" {
-				attrsOrAlias = aliasMap
+			if aliasMap != nil {
+				// Create a merged map instead of replacing
+				attrsMergedWithAlias = make(map[string]interface{})
+				// Copy base attributes
+				for k, v := range attrs {
+					attrsMergedWithAlias[k] = v
+				}
+				// Override with alias-specific attributes
+				for k, v := range aliasMap {
+					attrsMergedWithAlias[k] = v
+				}
 			}
 		}
 
-		changed, diags := setFieldInner(key, val, name, typ, attrsOrAlias, ctx, d, meta, doDiff, isCreate, forcedChangeKeys, forcedChangeVals)
+		changed, diags := setFieldInner(key, val, name, typ, attrsMergedWithAlias, ctx, d, meta, doDiff, isCreate, forcedChangeKeys, forcedChangeVals)
 		if diags != nil {
 			return diags
 		}
