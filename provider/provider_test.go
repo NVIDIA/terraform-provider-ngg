@@ -453,55 +453,6 @@ func buildMockAccResourceResource(prefix string) string {
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// Circuit Breaker
-
-func TestAccResourceCircuitBreaker(t *testing.T) {
-	pre := RandomAlphaPrefix(5)
-	name := pre + "_circuit_breaker"
-	fullName := ProviderShortName + "_circuit_breaker." + name
-
-	resource.UnitTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: providerFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: getProviderConfigString() + buildMockAccResourceAction(pre, false) + buildMockAccResourceCircuitBreaker(pre),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(fullName, "name", name),
-					resource.TestCheckResourceAttr(fullName, "command", "hosts | id=[1,2] | "+pre+"_ls_action"),
-					resource.TestCheckResourceAttr(fullName, "breaker_type", "hard"),
-					resource.TestCheckResourceAttr(fullName, "hard_limit", "5"),
-					resource.TestCheckResourceAttr(fullName, "duration", "10s"),
-					resource.TestCheckResourceAttr(fullName, "fail_over", "safe"),
-				),
-			},
-			{
-				// Test Importer..
-				ResourceName:      fullName,
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-func buildMockAccResourceCircuitBreaker(prefix string) string {
-	name := prefix + "_circuit_breaker"
-	return `
-		resource "` + ProviderShortName + `_circuit_breaker" "` + name + `" {
-			name = "` + name + `"
-			command = "hosts | id=[1,2] | ${` + ProviderShortName + `_action.` + prefix + `_ls_action.name} "
-			breaker_type = "hard"
-			hard_limit = 5
-			duration = "10s"
-			fail_over = "safe"
-			enabled = true
-		}
-`
-}
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 // File
 
 func TestAccResourceFile(t *testing.T) {

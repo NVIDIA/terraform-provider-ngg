@@ -17,7 +17,6 @@ var SupportedResourceTypes = []string{
 	"alarm",
 	"time_trigger",
 	"bot",
-	"circuit_breaker",
 	"file",
 	"integration",
 	"metric",

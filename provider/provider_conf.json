@@ -388,79 +388,6 @@
 			}
 		}
 	},
-	"circuit_breaker": {
-		"attributes": {
-			"type": {
-				"type": "string",
-				"computed": true,
-				"value": "CIRCUIT_BREAKER"
-			},
-			"name": {
-				"type": "label",
-				"required": true,
-				"forcenew": true,
-				"skip": true
-			},
-			"command": {
-				"type": "command",
-				"required": true,
-				"primary": true,
-				"forcenew": true,
-				"refs": {
-					"action": 1
-				},
-				"compound_in": "^\\s*(?P<resource_query>.+)\\s*\\|\\s*(?P<action_name>[a-zA-Z_][a-zA-Z_]*)\\s*$",
-				"compound_out": "${resource_query} | ${action_name}"
-			},
-			"breaker_type": {
-				"type": "string",
-				"optional": true
-			},
-			"hard_limit": {
-				"type": "int",
-				"required": true
-			},
-			"soft_limit": {
-				"type": "int",
-				"optional": true,
-				"default": -1
-			},
-			"duration": {
-				"type": "time_s",
-				"required": true
-			},
-			"fail_over": {
-				"type": "string",
-				"optional": true,
-				"default": "safe"
-			},
-			"enabled": {
-				"type": "bool",
-				"optional": true,
-				"default": false
-			},
-			"action_name": {
-				"type": "command",
-				"internal": true
-			},
-			"resource_query": {
-				"type": "command",
-				"internal": true
-			},
-			"communication_workspace": {
-				"type": "string",
-				"optional": true,
-				"min_ver": "14.1.0",
-				"step": "communication.workspace"
-			},
-			"communication_channel": {
-				"type": "string",
-				"optional": true,
-				"min_ver": "14.1.0",
-				"step": "communication.channel"
-			}
-		}
-	},
 	"file": {
 		"attributes": {
 			"type": {
@@ -1427,7 +1354,6 @@
 			"alarm": "A condition that triggers Alerts or Actions.",
 			"time_trigger": "A condition that triggers Notebooks.",
 			"bot": "An automation that ties an Action to an Alert.",
-			"circuit_breaker": "An automatic rate limit on actions.",
 			"file": "A datafile that is automatically copied/distributed to defined Resources.",
 			"integration": "A third-party integration (e.g. DataDog, NewRelic, etc).",
 			"metric": "A periodic measurement of a system property.",

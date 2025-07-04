@@ -24,12 +24,6 @@ module "bot" {
   minimal_runbook_name      = module.runbook.minimal_runbook_name
 }
 
-module "circuit_breaker" {
-  source              = "../circuit_breaker"
-  full_action_name    = module.action.full_action_name
-  minimal_action_name = module.action.minimal_action_name
-}
-
 module "file" {
   source = "../file"
 }

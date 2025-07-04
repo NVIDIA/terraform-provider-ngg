@@ -240,7 +240,7 @@ func CheckUpdateResult(result string) error {
 	}
 
 	actions := []string{"define", "delete", "update"}
-	types := []string{"resource", "metric", "alarm", "action", "bot", "file", "integration", "notebook", "configuration", "time_trigger", "circuit_breaker", "principal", "report_template", "dashboard", "secret"}
+	types := []string{"resource", "metric", "alarm", "action", "bot", "file", "integration", "notebook", "configuration", "time_trigger", "principal", "report_template", "dashboard", "secret"}
 	for _, act := range actions {
 		for _, typ := range types {
 			key := act + "_" + typ
@@ -507,7 +507,6 @@ func New(version string) func() *schema.Provider {
 				ProviderShortName + "_alarm":           ResourceObject(ObjectConfigJsonStr, "alarm"),
 				ProviderShortName + "_time_trigger":    ResourceObject(ObjectConfigJsonStr, "time_trigger"),
 				ProviderShortName + "_bot":             ResourceObject(ObjectConfigJsonStr, "bot"),
-				ProviderShortName + "_circuit_breaker": ResourceObject(ObjectConfigJsonStr, "circuit_breaker"),
 				ProviderShortName + "_file":            ResourceObject(ObjectConfigJsonStr, "file"),
 				ProviderShortName + "_integration":     ResourceObject(ObjectConfigJsonStr, "integration"),
 				ProviderShortName + "_metric":          ResourceObject(ObjectConfigJsonStr, "metric"),
@@ -717,7 +716,7 @@ func ResourceObject(configJsStr string, key string) *schema.Resource {
 			}
 		case "time_s":
 			sch.Type = schema.TypeString
-			// special case for circuit_breaker
+			// special case for circuit_breaker (to be tested after refactoring this area)
 			sch.DiffSuppressFunc = func(k, old, nu string, d *schema.ResourceData) bool {
 				oldT := timeSuffixToIntSec(old)
 				nuT := timeSuffixToIntSec(nu)
@@ -2475,7 +2474,7 @@ func ResourceObjectRead(typ string, attrs map[string]interface{}, objectDef map[
 
 		stepsJs := map[string]interface{}{}
 
-		if typ == "alarm" || typ == "action" || typ == "bot" || typ == "integration" || typ == "notebook" || typ == "runbook" || typ == "time_trigger" || typ == "circuit_breaker" || typ == "report_template" || typ == "dashboard" || typ == "nvault_secret" {
+		if typ == "alarm" || typ == "action" || typ == "bot" || typ == "integration" || typ == "notebook" || typ == "runbook" || typ == "time_trigger" || typ == "report_template" || typ == "dashboard" || typ == "nvault_secret" {
 			// extract fields from step objects
 			op := ""
 			if typ == "nvault_secret" {
