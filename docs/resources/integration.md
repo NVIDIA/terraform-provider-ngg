@@ -54,4 +54,4 @@ NVIDIA Mission Control autonomous hardware recovery integration. A third-party i
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-- `type` (String) The type of object (i.e., Alarm, Action, Bot, Metric, Resource, or File).
+- `type` (String) The type of object (i.e., Alarm, Action, Bot, Resource, or File).

@@ -722,39 +722,6 @@
 			}
 		}
 	},
-	"metric": {
-		"attributes": {
-			"type": {
-				"type": "string",
-				"computed": true,
-				"value": "METRIC"
-			},
-			"name": {
-				"type": "label",
-				"required": true,
-				"forcenew": true,
-				"skip": true
-			},
-			"value": {
-				"type": "command",
-				"required": true,
-				"primary": true,
-				"alias_out": "val"
-			},
-			"description": {
-				"type": "string",
-				"optional": true
-			},
-			"units": {
-				"type": "string",
-				"optional": true
-			},
-			"resource_type": {
-				"type": "resource",
-				"optional": true
-			}
-		}
-	},
 	"notebook": {
 		"attributes": {
 			"type": {
@@ -1356,7 +1323,6 @@
 			"bot": "An automation that ties an Action to an Alert.",
 			"file": "A datafile that is automatically copied/distributed to defined Resources.",
 			"integration": "A third-party integration (e.g. DataDog, NewRelic, etc).",
-			"metric": "A periodic measurement of a system property.",
 			"notebook": "An interactive notebook of Op commands and user documentation.",
 			"principal": "An authorization group (e.g. Okta groups). Note: Admin privilege (in NVIDIA Mission Control autonomous hardware recovery) to create principal objects.",
 			"resource": "A server or compute resource in the system (e.g. host, pod, container).",
@@ -1367,7 +1333,7 @@
 		},
 		"attributes": {
 			"name": "The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).",
-			"type": "The type of object (i.e., Alarm, Action, Bot, Metric, Resource, or File).",
+			"type": "The type of object (i.e., Alarm, Action, Bot, Resource, or File).",
 			"action_limit": "The number of simultaneous actions allowed for a permissions group.",
 			"administer_permission": "If a permissions group is allowed to perform \"administer\" actions.",
 			"allowed_entities": "The list of users who can run an action or notebook. Any user can run if left empty.",
@@ -1427,8 +1393,7 @@
 			"start_short_template": "The short description when starting the Action.",
 			"start_title_template": "UI title of the start of the Action.",
 			"timeout": "Maximum time to wait, in milliseconds.",
-			"units": "Units of a Metric (e.g., bytes, blocks, packets, percent).",
-			"value": "The Op statement that defines a Metric or Resource.",
+			"value": "The Op statement that defines a Resource.",
 			"view_limit": "The number of simultaneous metrics allowed for a permissions group.",
 			"is_run_output_persisted": "A boolean value denoting whether or not cell outputs should be persisted when running a notebook",
 			"communication_workspace": "A string value denoting the slack workspace where notifications related to the object should be sent to.",

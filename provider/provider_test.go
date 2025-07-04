@@ -371,49 +371,6 @@ func buildMockAccResourceBot(prefix string) string {
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// Metric
-
-func TestAccResourceMetric(t *testing.T) {
-	pre := RandomAlphaPrefix(5)
-
-	resource.UnitTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: providerFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: getProviderConfigString() + buildMockAccResourceMetric(pre),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(ProviderShortName+"_metric."+pre+"_cpu_plus_one", "name", pre+"_cpu_plus_one"),
-					resource.TestCheckResourceAttr(ProviderShortName+"_metric."+pre+"_cpu_plus_one", "value", "cpu_usage + 2"),
-					resource.TestCheckResourceAttr(ProviderShortName+"_metric."+pre+"_cpu_plus_one", "description", "Erroneous CPU usage."),
-					resource.TestCheckResourceAttr(ProviderShortName+"_metric."+pre+"_cpu_plus_one", "resource_type", "POD"),
-					resource.TestCheckResourceAttr(ProviderShortName+"_metric."+pre+"_cpu_plus_one", "units", "cores"),
-				),
-			},
-			{
-				// Test Importer..
-				ResourceName:      ProviderShortName + "_metric." + pre + "_cpu_plus_one",
-				ImportState:       true,
-				ImportStateVerify: true,
-			},
-		},
-	})
-}
-
-func buildMockAccResourceMetric(prefix string) string {
-	return `
-		resource "` + ProviderShortName + `_metric" "` + prefix + `_cpu_plus_one" {
-			name = "` + prefix + `_cpu_plus_one"
-			value = "cpu_usage + 2"
-			description = "Erroneous CPU usage."
-			resource_type = "POD"
-			units = "cores"
-		}
-`
-}
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 // Resource
 
 func TestAccResourceResource(t *testing.T) {

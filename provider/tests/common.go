@@ -19,7 +19,6 @@ var SupportedResourceTypes = []string{
 	"bot",
 	"file",
 	"integration",
-	"metric",
 	"notebook",
 	"principal",
 	"resource",

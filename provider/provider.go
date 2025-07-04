@@ -240,7 +240,7 @@ func CheckUpdateResult(result string) error {
 	}
 
 	actions := []string{"define", "delete", "update"}
-	types := []string{"resource", "metric", "alarm", "action", "bot", "file", "integration", "notebook", "configuration", "time_trigger", "principal", "report_template", "dashboard", "secret"}
+	types := []string{"resource", "alarm", "action", "bot", "file", "integration", "notebook", "configuration", "time_trigger", "principal", "report_template", "dashboard", "secret"}
 	for _, act := range actions {
 		for _, typ := range types {
 			key := act + "_" + typ
@@ -509,7 +509,6 @@ func New(version string) func() *schema.Provider {
 				ProviderShortName + "_bot":             ResourceObject(ObjectConfigJsonStr, "bot"),
 				ProviderShortName + "_file":            ResourceObject(ObjectConfigJsonStr, "file"),
 				ProviderShortName + "_integration":     ResourceObject(ObjectConfigJsonStr, "integration"),
-				ProviderShortName + "_metric":          ResourceObject(ObjectConfigJsonStr, "metric"),
 				ProviderShortName + "_notebook":        ResourceObject(ObjectConfigJsonStr, "notebook"),
 				ProviderShortName + "_runbook":         ResourceObject(ObjectConfigJsonStr, "notebook"), // alias <name>_runbook to <name>_notebook
 				ProviderShortName + "_principal":       ResourceObject(ObjectConfigJsonStr, "principal"),

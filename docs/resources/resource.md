@@ -38,7 +38,7 @@ resource "mcahr_resource" "az_k8s" {
 ### Required
 
 - `name` (String) The name/symbol for the object within NVIDIA Mission Control autonomous hardware recovery and the op language (must be unique, only alphanumeric/underscore).
-- `value` (String) The Op statement that defines a Metric or Resource.
+- `value` (String) The Op statement that defines a Resource.
 
 ### Optional
 
@@ -48,4 +48,4 @@ resource "mcahr_resource" "az_k8s" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-- `type` (String) The type of object (i.e., Alarm, Action, Bot, Metric, Resource, or File).
+- `type` (String) The type of object (i.e., Alarm, Action, Bot, Resource, or File).

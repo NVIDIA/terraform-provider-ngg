@@ -28,10 +28,6 @@ module "file" {
   source = "../file"
 }
 
-module "metric" {
-  source = "../metric"
-}
-
 module "runbook" {
   source = "../runbook"
 }
