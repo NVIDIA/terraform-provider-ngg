@@ -56,14 +56,16 @@ resource "mcahr_runbook" "full_runbook" {
       "md" : "CREATE"
     },
     {
-      "op" : "action success = `echo SUCCESS`"
+      "op" : "action success = `echo SUCCESS`",
+      "description" : "Creates an action that echoes SUCCESS"
     },
     {
       "op" : "enable success"
     },
     {
       "op" : "success",
-      "enabled" : false
+      "enabled" : false,
+      "description" : "Runs the success action. This cell is disabled."
     },
     {
       "md" : "CLEANUP"

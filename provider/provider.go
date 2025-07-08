@@ -1232,12 +1232,16 @@ func NormalizeNotebookCells(cells *[]interface{}) {
 		}
 		enabled := GetNestedValueOrDefault(vmap, ToKeyPath("enabled"), nil)
 		name := GetNestedValueOrDefault(vmap, ToKeyPath("name"), nil)
+		description := GetNestedValueOrDefault(vmap, ToKeyPath("description"), nil)
 
 		if enabled == nil {
 			vmap["enabled"] = true
 		}
 		if name == nil {
 			vmap["name"] = "unnamed"
+		}
+		if description == nil {
+			vmap["description"] = ""
 		}
 
 		backendVersion := GetBackendVersionInfoStruct()
