@@ -737,6 +737,9 @@ func ResourceObject(configJsStr string, key string) *schema.Resource {
 				}
 				// NOTE: notebook.params has "match_null", so it's handled below
 				if k == "cells" {
+					if old == "[]" && nu == "" {
+						return true
+					}
 					oldArr, oldErr := StringToJsonArray(old)
 					nuArr, nuErr := StringToJsonArray(nu)
 					if oldErr != nil || nuErr != nil {
@@ -1909,14 +1912,17 @@ func ResourceObjectSetFields(typ string, attrs map[string]interface{}, objectDef
 		// NOTE: Terraform reports !exists when a value is explicitly supplied, but matches the 'default'
 		//if exists || d.HasChange(key) {
 		if notebookIsInline(typ, attrs, objectDef, ctx, d, meta) {
-			if exists {
+			if !exists {
+				runbookData, err = buildRunbookDataObject(d, []interface{}{})
+			} else {
 				runbookData, err = buildRunbookDataObject(d, CastToObject(cells))
-				appendActionLog(fmt.Sprintf("buildRunbookDataObject input: [[[ %v ]]]\n", runbookData))
-				appendActionLog(fmt.Sprintf("buildRunbookDataObject output: [[[ %v ]]]\n", runbookData))
-				if err != nil {
-					diags = diag.Errorf("Failed to build runbook data object: %s", err)
-					return diags
-				}
+			}
+
+			appendActionLog(fmt.Sprintf("buildRunbookDataObject input: [[[ %v ]]]\n", runbookData))
+			appendActionLog(fmt.Sprintf("buildRunbookDataObject output: [[[ %v ]]]\n", runbookData))
+			if err != nil {
+				diags = diag.Errorf("Failed to build runbook data object: %s", err)
+				return diags
 			}
 		} else {
 			key = "data"
@@ -2135,8 +2141,8 @@ func notebookIsInline(typ string, attrs map[string]interface{}, objectDef map[st
 		//appendActionLog(fmt.Sprintf("InlineCheck: dataExists(%v) isNill(%v) isEmptyStr(%v) :: value= %+v\n", dataExists, (data == nil), (data == ""), data))
 		return false
 	}
-	appendActionLog(fmt.Sprintf("InlineCheck: DEFAULT\n"))
-	return false
+	appendActionLog(fmt.Sprintf("InlineCheck: DEFAULT (true)\n"))
+	return true
 }
 
 func ResourceObjectCreate(typ string, primary string, attrs map[string]interface{}, objectDef map[string]interface{}) func(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
