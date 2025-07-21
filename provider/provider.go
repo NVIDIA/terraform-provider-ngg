@@ -766,6 +766,42 @@ func ResourceObject(configJsStr string, key string) *schema.Resource {
 					//appendActionLog(fmt.Sprintf("NormalizeNotebookJson() OldJs: '%s'\n", CastToString(oldJs)))
 					//appendActionLog(fmt.Sprintf("notebook.data DiffSuppressFunc, new: %+v \n", nuJs))
 					//appendActionLog(fmt.Sprintf("notebook.data DiffSuppressFunc, old: %+v \n", oldJs))
+
+					// Handle diffs on cells from "data" field
+					oldCells := oldJs["cells"].([]interface{})
+					nuCells := nuJs["cells"].([]interface{})
+					if len(oldCells) != len(nuCells) {
+						return false
+					}
+					for cellIndex, cell := range oldCells {
+						oldCellMap := cell.(map[string]interface{})
+						nuCellMap := nuCells[cellIndex].(map[string]interface{})
+
+						// Secret aware
+						oldSecretAware := GetNestedValueOrDefault(oldCellMap, ToKeyPath("secret_aware"), nil)
+						nuSecretAware := GetNestedValueOrDefault(nuCellMap, ToKeyPath("secret_aware"), nil)
+						if nuSecretAware == nil {
+							if oldSecretAware == nil {
+								nuCellMap["secret_aware"] = nil
+							} else {
+								nuCellMap["secret_aware"] = oldSecretAware
+							}
+						}
+
+						// Description
+						oldDescription := GetNestedValueOrDefault(oldCellMap, ToKeyPath("description"), nil)
+						nuDescription := GetNestedValueOrDefault(nuCellMap, ToKeyPath("description"), nil)
+						if nuDescription == nil || nuDescription == "" {
+							if oldDescription == nil {
+								nuCellMap["description"] = nil
+							} else if oldDescription == "" {
+								nuCellMap["description"] = ""
+							} else {
+								nuCellMap["description"] = oldDescription
+							}
+						}
+					}
+
 					if reflect.DeepEqual(oldJs, nuJs) {
 						return true
 					}
@@ -1248,7 +1284,8 @@ func NormalizeNotebookCells(cells *[]interface{}) {
 		}
 
 		backendVersion := GetBackendVersionInfoStruct()
-		if IsSecretAwareSupported(backendVersion) {
+
+		if IsCellsSecretAwareSupported(backendVersion) {
 			secret_aware := GetNestedValueOrDefault(vmap, ToKeyPath("secret_aware"), nil)
 			// set secret_aware only if backend version >= 28.1 && backend_version != 28.3
 			if secret_aware == nil {
@@ -1258,30 +1295,18 @@ func NormalizeNotebookCells(cells *[]interface{}) {
 			// Explicitly remove secret_aware if backend version doesn't support it
 			delete(vmap, "secret_aware")
 		}
-	}
-}
 
-func IsSecretAwareSupported(backendVersion VersionRecord) bool {
-	if !backendVersion.Valid {
-		var build struct {
-			Tag string `json:"tag"`
-		}
-		if err := json.Unmarshal([]byte(backendVersion.Build), &build); err == nil {
-			return strings.HasPrefix(build.Tag, "private-") ||
-				strings.HasPrefix(build.Tag, "arm-private-") ||
-				strings.HasPrefix(build.Tag, "master-")
+		if IsCellsDescriptionSupported(backendVersion) {
+			description := GetNestedValueOrDefault(vmap, ToKeyPath("description"), nil)
+			// set description only if backend version >= 29.0
+			if description == nil {
+				vmap["description"] = ""
+			}
+		} else {
+			// Explicitly remove description if backend version doesn't support it
+			delete(vmap, "description")
 		}
 	}
-
-	if backendVersion.Major > 28 {
-		return true
-	}
-	if backendVersion.Major == 28 {
-		return (backendVersion.Minor == 1 && backendVersion.Patch >= 54) ||
-			(backendVersion.Minor == 2 && backendVersion.Patch >= 4) ||
-			backendVersion.Minor > 3
-	}
-	return false // Covers Major < 28
 }
 
 func EscapeString(val interface{}) string {

@@ -6,6 +6,7 @@ package provider
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -84,12 +85,9 @@ func buildCellsData(cells interface{}) (interface{}, error) {
 			return nil, fmt.Errorf(`runbook cell 'name' must be a string (or not set).`)
 		}
 
-		description, descOk := GetNestedValueOrDefault(cell, ToKeyPath("description"), "").(string)
-		if !descOk {
-			return nil, fmt.Errorf(`runbook cell 'description' must be a string (or not set).`)
-		}
-
 		secretAware := GetNestedValueOrDefault(cell, ToKeyPath("secret_aware"), nil)
+
+		description := GetNestedValueOrDefault(cell, ToKeyPath("description"), nil)
 
 		cellContent, err := GetCellContent(markdownContent, oplangContent, enabled, secretAware, name, description)
 		if err != nil {
@@ -102,7 +100,7 @@ func buildCellsData(cells interface{}) (interface{}, error) {
 	return cellsData, nil
 }
 
-func GetCellContent(markdownContent interface{}, oplangContent interface{}, enabled bool, secretAware interface{}, name string, description string) (map[string]interface{}, error) {
+func GetCellContent(markdownContent interface{}, oplangContent interface{}, enabled bool, secretAware interface{}, name string, description interface{}) (map[string]interface{}, error) {
 	var cellContent map[string]interface{}
 	if markdownContent != nil {
 		if _, ok := markdownContent.(string); !ok {
@@ -110,11 +108,10 @@ func GetCellContent(markdownContent interface{}, oplangContent interface{}, enab
 		}
 
 		cellContent = map[string]interface{}{
-			"content":     markdownContent,
-			"enabled":     enabled,
-			"type":        "MARKDOWN",
-			"name":        name,
-			"description": description,
+			"content": markdownContent,
+			"enabled": enabled,
+			"type":    "MARKDOWN",
+			"name":    name,
 		}
 	} else {
 		if _, ok := oplangContent.(string); !ok {
@@ -122,23 +119,38 @@ func GetCellContent(markdownContent interface{}, oplangContent interface{}, enab
 		}
 
 		cellContent = map[string]interface{}{
-			"content":     oplangContent,
-			"enabled":     enabled,
-			"type":        "OP_LANG",
-			"name":        name,
-			"description": description,
+			"content": oplangContent,
+			"enabled": enabled,
+			"type":    "OP_LANG",
+			"name":    name,
 		}
 	}
 
-	// Only add secret_aware if the backend version supports it
 	backendVersion := GetBackendVersionInfoStruct()
-	if IsSecretAwareSupported(backendVersion) {
+
+	// Only add secret_aware if the backend version supports it
+	if IsCellsSecretAwareSupported(backendVersion) {
 		if secretAware != nil {
 			if _, ok := secretAware.(bool); !ok {
 				return nil, fmt.Errorf(`runbook cell 'secret_aware' must be a boolean (or not set).`)
 			}
 
 			cellContent["secret_aware"] = secretAware.(bool)
+		} else {
+			cellContent["secret_aware"] = false
+		}
+	}
+
+	// Only add description if the backend version supports it
+	if IsCellsDescriptionSupported(backendVersion) {
+		if description != nil {
+			if _, ok := description.(string); !ok {
+				return nil, fmt.Errorf(`runbook cell 'description' must be a string (or not set).`)
+			}
+
+			cellContent["description"] = description.(string)
+		} else {
+			cellContent["description"] = ""
 		}
 	}
 
@@ -237,4 +249,35 @@ func buildExternalParametersData(d *schema.ResourceData) ([]interface{}, error) 
 	}
 
 	return externalParametersData, nil
+}
+
+func isDevEnv(backendVersion VersionRecord) bool {
+	if !backendVersion.Valid {
+		var build struct {
+			Tag string `json:"tag"`
+		}
+		if err := json.Unmarshal([]byte(backendVersion.Build), &build); err == nil {
+			return strings.HasPrefix(build.Tag, "private-") ||
+				strings.HasPrefix(build.Tag, "arm-private-") ||
+				strings.HasPrefix(build.Tag, "master-")
+		}
+	}
+	return false
+}
+
+func IsCellsSecretAwareSupported(backendVersion VersionRecord) bool {
+	if isDevEnv(backendVersion) || backendVersion.Major > 28 {
+		return true
+	}
+
+	if backendVersion.Major == 28 {
+		return (backendVersion.Minor == 1 && backendVersion.Patch >= 54) ||
+			(backendVersion.Minor == 2 && backendVersion.Patch >= 4) ||
+			backendVersion.Minor > 3
+	}
+	return false // Covers Major < 28
+}
+
+func IsCellsDescriptionSupported(backendVersion VersionRecord) bool {
+	return isDevEnv(backendVersion) || backendVersion.Major > 29
 }
