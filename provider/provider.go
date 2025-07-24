@@ -33,6 +33,9 @@ var (
 	DefaultUserName      string // Will be set at build time
 )
 
+// Global backend version - fetched once during provider initialization
+var globalBackendVersion VersionRecord
+
 func StringToJsonArray(data string) ([]interface{}, error) {
 	//jsObj := map[string]interface{}{}
 	jsObj := []interface{}{}
@@ -196,7 +199,10 @@ func runOpCommand(command string, checkResult bool) (string, error) {
 	return result, err
 }
 
-func runOpCommandToJson(command string) (map[string]interface{}, error) {
+// Function variable to allow mocking in tests
+var runOpCommandToJsonFunc = runOpCommandToJsonImpl
+
+func runOpCommandToJsonImpl(command string) (map[string]interface{}, error) {
 	result, err := runOpCommand(command, false)
 	if err != nil {
 		errOut := fmt.Errorf("Failed to execute op '%s': %s", command, err.Error())
@@ -211,6 +217,10 @@ func runOpCommandToJson(command string) (map[string]interface{}, error) {
 		return nil, errOut
 	}
 	return js, nil
+}
+
+func runOpCommandToJson(command string) (map[string]interface{}, error) {
+	return runOpCommandToJsonFunc(command)
 }
 
 func getNamedObjectFromClassDef(name string, typ string, classJs map[string]interface{}) map[string]interface{} {
@@ -431,7 +441,29 @@ func ExtractVersionData(verStr string) (major int64, minor int64, patch int64, e
 	return
 }
 
+func shouldInitializeBackendVersion() bool {
+	return !globalBackendVersion.Valid
+}
+
 func GetBackendVersionInfo() (build string, version string, major int64, minor int64, patch int64, err *error) {
+
+	if shouldInitializeBackendVersion() {
+		appendActionLog("BackendVersionInfo: Backend version not initialised, making API call\n")
+		globalBackendVersion.Build, globalBackendVersion.Version, globalBackendVersion.Major, globalBackendVersion.Minor, globalBackendVersion.Patch, globalBackendVersion.Error = GetBackendVersionInfoUsingApi()
+		globalBackendVersion.Valid = (globalBackendVersion.Error == nil)
+		if globalBackendVersion.Valid {
+			appendActionLog(fmt.Sprintf("BackendVersionInfo: Backend version initialised: %s\n", globalBackendVersion.Version))
+		} else {
+			appendActionLog("BackendVersionInfo: Failed to initialise backend version due to error: " + (*globalBackendVersion.Error).Error() + "\n")
+		}
+	}
+
+	appendActionLog(fmt.Sprintf("BackendVersionInfo: Using cached backend version: %s\n", globalBackendVersion.Version))
+	return globalBackendVersion.Build, globalBackendVersion.Version, globalBackendVersion.Major, globalBackendVersion.Minor, globalBackendVersion.Patch, globalBackendVersion.Error
+}
+
+func GetBackendVersionInfoUsingApi() (build string, version string, major int64, minor int64, patch int64, err *error) {
+
 	err = nil
 	build = "unknown"
 	version = "unknown"
@@ -440,6 +472,7 @@ func GetBackendVersionInfo() (build string, version string, major int64, minor i
 	// ... "get_backend_version": "{ \"tag\": \"release-1.2.3-stuff\", \"build_date\": \"Wed_May_18_00:07:11_UTC_2022\" }", ...
 	js, opErr := runOpCommandToJson("backend_version")
 	if opErr != nil {
+		err = &opErr
 		return
 	}
 	build = GetNestedValueOrDefault(js, ToKeyPath("get_backend_version"), "unknown").(string)
@@ -2739,4 +2772,18 @@ func ResourceObjectDelete(typ string, objectDef map[string]interface{}) func(ctx
 		}
 		return diags
 	}
+}
+
+// Test helper functions - exported for use in tests package
+
+func ResetGlobalBackendVersionForTesting() {
+	globalBackendVersion = VersionRecord{}
+}
+
+func SetRunOpCommandToJsonFuncForTesting(fn func(string) (map[string]interface{}, error)) {
+	runOpCommandToJsonFunc = fn
+}
+
+func ResetRunOpCommandToJsonFuncForTesting() {
+	runOpCommandToJsonFunc = runOpCommandToJsonImpl
 }
